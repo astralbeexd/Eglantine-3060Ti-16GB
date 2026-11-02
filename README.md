@@ -1,111 +1,96 @@
-# Eglantine-3060Ti-16GB
-HECHO COMPLETAMENTE CON IA SOBRE EL CÓDIGO DE EGLANTINE NX2 (BASE EXACTA INDICADA ABAJO).
-Compilación comunitaria experimental para Windows, probada en Ryzen 7 5800X,
-RTX 3060 Ti de 8 GB y 16 GB de RAM. No es una versión oficial ni garantiza 60 FPS.
+# Eglantine · RTX 3060 Ti / 16 GB
 
-## Estado de las descargas
+Emulador comunitario **experimental para Windows**, basado en Eglantine. Pensado para probarlo sin compilar ni instalar MSYS2.
 
-Este repositorio contiene los parches, los 27 archivos de código y configuración modificados,
-el perfil portátil y las instrucciones para reconstruir el programa desde una base exacta.
-Ya está disponible la [prerelease experimental con ejecutables](https://github.com/astralbeexd/Eglantine-3060Ti-16GB/releases/tag/v1.0.0-3060ti16gb-romfs1).
+## Empieza aquí
 
-- **Primera instalación:** descarga `Eglantine-3060Ti-16GB-carga-corregida-portable.zip`,
-  extrae toda la carpeta y abre `Iniciar.cmd`.
-- **Actualizar el paquete de este repositorio:** descarga `Eglantine-3060Ti-16GB-actualizacion-carga.zip`,
-  cierra el emulador y reemplaza los dos ejecutables. Conserva `user`.
+### 1. Descarga el paquete completo
 
-La release incluye hashes SHA-256, recibos de pruebas y enlaces a las fuentes completas.
-Pasaron las pruebas aisladas de carga y ClamAV; una carrera completa sigue pendiente.
-Es una versión para probar, sin garantía de 60 FPS ni certificación de seguridad.
+**[⬇ Descargar el emulador para Windows (ZIP, unos 69 MB)](https://github.com/astralbeexd/Eglantine-3060Ti-16GB/releases/download/v1.0.0-3060ti16gb-romfs1/Eglantine-3060Ti-16GB-carga-corregida-portable.zip)**
 
-## Cambios principales
+También puedes abrir la [página de descarga](https://github.com/astralbeexd/Eglantine-3060Ti-16GB/releases/tag/v1.0.0-3060ti16gb-romfs1) y buscar **Assets**.
 
-- Reutilización del código nativo transformado de shaders, tomada de Wael3rd.
-- Correcciones de liberación, inicialización parcial y movimientos de memoria en Windows.
-- Reintentos acotados cuando Windows no puede satisfacer temporalmente la reserva fastmem.
-- Aritmética protegida en contabilidad Vulkan y antigüedad de texturas.
-- Reducción de mensajes repetidos de auto-stubs NX2, conservando sus respuestas.
-- Compilación Release para Zen 3 y ThinLTO selectivo del renderizador; PGO desactivado.
-- Instrumentación opcional de tiempos y memoria, desactivada para uso normal.
+Elige **Eglantine-3060Ti-16GB-carga-corregida-portable.zip**. Los archivos “Source code” son para desarrolladores.
 
-El límite experimental del descuento de memoria libre VMA queda desactivado por defecto.
-No se repararon todos los servicios desconocidos ni se eliminó toda la compilación de shaders.
+### 2. Extrae la carpeta
 
-## Perfil y recomendaciones
+1. Abre **Descargas** en el Explorador de archivos.
+2. Haz clic derecho sobre el ZIP y selecciona **Extraer todo…**.
+3. Pulsa **Extraer** y abre la carpeta extraída.
+4. Entra en **Eglantine-3060Ti-16GB**, donde están el programa y las DLL.
 
-Salida 1920×1080 en modo portátil y escala 1x. El juego conserva su resolución dinámica:
-esto no equivale a demostrar que cada pase 3D sea nativo a 1080p.
-CPU Normal; límites normal/turbo 100%; sin ticks personalizados ni generación de cuadros.
-GPU Boost altera consultas de tiempo de GPU, sin multiplicar el reloj de CPU.
-Shaders y presentación asíncronos activos; reactive flushing desactivado.
+### 3. Abre el emulador
 
-La build local usa `-march=znver3`: se dirige a Zen 3 y no se ha validado en otros procesadores.
-No se anuncia como compatible con cualquier CPU que tenga una RTX 3060 Ti.
-Para otro hardware, recompila con las opciones apropiadas. Necesitas un controlador Vulkan compatible.
-Deja la paginación de Windows disponible; no limites artificialmente el proceso a 4 GB.
-No ejecutes varias copias del juego a la vez y permite que se caliente la caché de shaders.
-No compartas cachés entre drivers o builds sin comprobar compatibilidad.
+Haz doble clic en **Iniciar.cmd** (puede aparecer simplemente como **Iniciar**).
+También puedes abrir **eglantine.exe**. Mantén juntos los archivos de la carpeta.
 
-En el tramo automático comparado se midieron 56,9 FPS; todavía hubo tirones.
-Dos pruebas llegaron a 18.000 presentaciones. El kart acelera sin dirección y puede
-chocar contra una barrera: estas cifras no equivalen a una carrera completa ni a todas las pistas.
-No hay demostración de funcionamiento con sólo 4 GB de RAM total: memoria privada,
-working set compartido y memoria comprometida son métricas distintas.
+No necesitas ejecutar como administrador, instalar MSYS2 ni abrir una terminal.
+Si Windows muestra una advertencia, comprueba la procedencia y los hashes de la release antes de decidir si ejecutarlo.
 
-## Uso del paquete portátil
+### 4. Configura el mando y tus archivos
 
-Extrae el ZIP completo en una carpeta con permisos de escritura; no ejecutes desde el ZIP.
-Abre `Iniciar.cmd`; las DLL y el perfil están incluidos y no necesitarás MSYS2 para jugar.
-`eglantine.exe` también abre directamente el perfil portátil incluido.
-Configura tu mando y aporta tu juego y archivos de consola necesarios mediante la interfaz.
-No se incluyen juegos, claves, firmware, NAND, partidas, perfiles personales ni cachés de shaders.
+1. Conecta tu mando.
+2. Abre **Emulation → Configure → Controls** y selecciona tu dispositivo.
+3. Aporta los archivos necesarios de tu propia consola mediante las opciones de instalación del menú **Tools**.
+4. Abre **File → Load File…** para seleccionar un juego obtenido legítimamente.
+5. Para ver tu colección en la pantalla principal, usa **Add New Game Directory** y selecciona su carpeta.
 
-## Código y compilación
+Los nombres de los menús pueden variar con el idioma. Los juegos, claves y firmware se aportan por separado.
 
-La base es [Djihads80/Eglantine](https://github.com/Djihads80/Eglantine),
-commit `6bde8c20d1f7c020a920e59a989c03822a08445d`.
-Este repositorio es una distribución de cambios sobre esa base, no un historial completo del fork.
-Los cuatro parches reproducen los 27 archivos de `modified/`.
+## ¿Ya tienes nuestra versión anterior?
 
-En MSYS2 UCRT64, desde la raíz del repositorio:
+Descarga [la actualización de ejecutables](https://github.com/astralbeexd/Eglantine-3060Ti-16GB/releases/tag/v1.0.0-3060ti16gb-romfs1).
+Cierra el emulador, extrae el ZIP de actualización y copia **eglantine.exe** y **eden-cli.exe**
+a tu carpeta existente, aceptando reemplazar esos dos archivos. Conserva **user**:
+contiene tu configuración y puede contener partidas y archivos de consola.
 
-```bash
-bash build-ucrt64.sh
-```
+## Antes de probar
 
-El script instala dependencias, descarga la base fijada, aplica los parches,
-ejecuta pruebas y compila con dos procesos. Puede ser necesario reiniciar UCRT64 al
-actualizar MSYS2. La compilación local se verificó; no se ha validado una instalación
-nueva de MSYS2 de principio a fin. Los paquetes del script no están fijados a versiones
-históricas: consulta `BUILD-INFO.json` para las versiones usadas localmente.
+- Hardware de referencia: **Ryzen 7 5800X, RTX 3060 Ti de 8 GB y 16 GB de RAM**.
+- Esta compilación se dirige a **Zen 3**; no está validada en otros procesadores. Tener una 3060 Ti por sí solo no garantiza compatibilidad.
+- Perfil incluido: escala **1x**, CPU Normal y límite de velocidad **100 %**. El juego puede conservar su resolución dinámica.
+- Usa una sola instancia y deja disponible la paginación de Windows.
+- La primera sesión puede tener tirones por compilación de shaders.
+- **No se garantizan 60 FPS, ausencia de fallos ni estabilidad en todos los juegos.**
 
-## Licencia, créditos y transparencia
+## Si algo falla
 
-GPL-3.0-or-later para el programa, respetando los avisos y licencias por archivo y dependencia.
-Consulta [CREDITS.md](CREDITS.md), [CHANGES.md](CHANGES.md) y [DISTRIBUTION.md](DISTRIBUTION.md).
-Cambios y documentación preparados con asistencia de IA. No se afirma una revisión humana
-completa del código ni certificación de seguridad o estabilidad. No se ha enviado un PR al proyecto original.
+| Lo que ves | Qué hacer |
+| --- | --- |
+| Faltan DLL | Extrae nuevamente el ZIP completo y conserva juntos todos sus archivos. |
+| Faltan claves o firmware | Comprueba que tus archivos propios correspondan a tu consola y a la versión necesaria. |
+| La lista de juegos está vacía | Usa Add New Game Directory o abre un archivo desde File. |
+| El mando no responde | Revisa Controls y el dispositivo seleccionado. |
+| Se congela o se cierra | Cierra esa instancia antes de volver a probar. Anota el juego, versión y momento del fallo. |
+| Necesitas reportar un problema | Consulta [cómo informar de un fallo](GUIA-RAPIDA.md#informar-de-un-fallo). Revisa el log antes de compartirlo. |
 
-## Seguridad y trazabilidad
+## Pruebas humanas y uso de IA
 
-Consulta [SECURITY.md](SECURITY.md), [AUDIT.md](AUDIT.md), el [estado de release](RELEASE-STATUS.json)
-y el [SBOM de bibliotecas dinámicas](SBOM.cdx.json). Los hashes y las pruebas no son una certificación de seguridad.
+**astralbeexd, responsable del repositorio, probó personalmente el emulador y comunicó sus observaciones de juego.**
+Eso no equivale a una auditoría humana completa ni a validar todas las pistas o juegos.
 
-Las cifras históricas de FPS usaron precisión de CPU Unsafe. El perfil público conserva Auto;
-no se deben extrapolar esas cifras a este perfil. Auto también activa algunas optimizaciones
-relajadas de Dynarmic; estos nombres describen precisión de emulación, no protección de Windows.
+Las modificaciones de esta edición y su documentación fueron realizadas con asistencia de inteligencia artificial.
+**No es una reescritura total desde cero:** conserva código de Eglantine, Eden, yuzu y de sus dependencias.
+Los créditos y licencias originales siguen correspondiendo a sus autores.
 
-La revisión actual y sus pendientes están en [SECURITY-REVIEW.md](SECURITY-REVIEW.md). La corrección de carga y los paquetes publicados pasaron las pruebas registradas; falta validar una carrera completa.
+La corrección de carga pasó pruebas aisladas: índice RomFS de 62,948 s a 0,993 s con el mismo hash de cabecera y tablas;
+la prueba de retención de metadatos también pasó. ClamAV no encontró detecciones en los paquetes identificados por sus hashes.
+**Una carrera completa con estos últimos binarios sigue pendiente de validación.**
 
-## Corrección de carga de RomFS extraído
+## Uso responsable
 
-El índice completo de una carpeta RomFS ya no se construye al consultar los metadatos
-del juego. Se construye al necesitarlo y se reutiliza dentro del mismo cargador.
-En Windows se obtiene el tipo y tamaño de los archivos durante la enumeración nativa;
-los puntos de reanálisis conservan la ruta de std::filesystem.
-También se rompen los ciclos de referencias de los nodos temporales al destruir el constructor.
+Este proyecto no distribuye ni enlaza juegos comerciales, claves de consola, firmware ni partidas personales.
+Usa únicamente archivos que tengas derecho a utilizar. Tener un juego no implica por sí solo permiso para descargar
+copias de terceros o eludir protecciones. No compartas esos materiales en issues ni en el repositorio.
+Consulta [las pautas de uso responsable](USO-RESPONSABLE.md).
 
-Prueba local: metadatos 11 ms, construcción del índice 62.948 ms antes y 993 ms después.
-La cabecera y las cuatro tablas del índice conservaron el mismo SHA-256. La prueba de
-64 índices pequeños pasó de 16.384 bytes retenidos a cero. No es una prueba de 60 FPS
-ni de una carrera completa. Véase `evidence/ROMFS-LOADING-REGRESSION.json`.
+## Licencias, fuentes y referencias
+
+- [Licencia del programa](LICENSE.txt) y [avisos de licencias](LICENSES/).
+- [Créditos y proyectos de origen](CREDITS.md).
+- [Cambios técnicos](CHANGES.md) · [README técnico anterior](DOCUMENTACION-TECNICA.md).
+- [Fuentes completas y recetas de dependencias](https://github.com/astralbeexd/Eglantine-3060Ti-16GB/releases/tag/security-sources-21a037c36009).
+- [Seguridad y límites de la revisión](SECURITY-REVIEW.md) · [estado de validación](RELEASE-STATUS.json).
+- [Hashes e informes de los paquetes](https://github.com/astralbeexd/Eglantine-3060Ti-16GB/releases/tag/v1.0.0-3060ti16gb-romfs1).
+
+Proyecto comunitario no oficial, sin afiliación ni respaldo de Nintendo. Se conservan las licencias por archivo y dependencia.
