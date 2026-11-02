@@ -12,7 +12,7 @@ patch -p1 < ../../../dependencies/patches/ffmpeg-hdr-cve-2026-107676.patch
   --target-os=mingw32 --arch=x86_64 --cc=gcc --cxx=g++ \
   --disable-autodetect --disable-everything --disable-programs --disable-doc \
   --disable-debug --disable-static --enable-shared --disable-network \
-  --disable-avdevice --disable-avfilter --disable-avformat --disable-postproc \
+  --disable-avdevice --disable-avfilter --disable-avformat \
   --enable-avcodec --enable-avutil --enable-swresample --enable-swscale \
   --enable-libdav1d --enable-ffnvcodec --enable-cuda --enable-d3d11va --enable-dxva2 \
   --enable-decoder=h264,hevc,vp8,vp9,av1,libdav1d \
