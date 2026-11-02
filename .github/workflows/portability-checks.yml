@@ -1,0 +1,38 @@
+name: Portability checks (not full emulator builds)
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  source-and-small-tests:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-24.04, windows-latest, macos-15]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 15
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - name: Fetch immutable upstream source
+        run: |
+          git init work/upstream
+          git -C work/upstream fetch --depth=1 https://github.com/Djihads80/Eglantine.git 6bde8c20d1f7c020a920e59a989c03822a08445d
+      - name: Check patches, hashes and public files
+        run: python3 tools/verify_source.py --upstream work/upstream
+      - name: Check build script syntax
+        run: bash -n build-ucrt64.sh
+      - name: Test platform-independent heap accounting
+        run: |
+          c++ -std=c++20 -O2 -Wall -Wextra -Werror -I modified/src/video_core/vulkan_common tests/heap_accounting_test.cpp -o work/heap-check
+          ./work/heap-check
+      - name: Test filesystem filter equivalence
+        run: |
+          c++ -std=c++20 -O2 -Wall -Wextra -Werror tests/fs_enumeration_test.cpp -o work/fs-check
+          ./work/fs-check work/portability-fixture

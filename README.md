@@ -44,6 +44,12 @@ Cierra el emulador, extrae el ZIP de actualización y copia **eglantine.exe** y 
 a tu carpeta existente, aceptando reemplazar esos dos archivos. Conserva **user**:
 contiene tu configuración y puede contener partidas y archivos de consola.
 
+## Compatibilidad con otros equipos
+
+El ZIP publicado actualmente sigue siendo la edición **Zen 3**. Se está preparando una
+edición genérica para más procesadores; todavía no se anuncia como descargable.
+Consulta [qué CPU y sistemas operativos están probados y cuáles siguen pendientes](COMPATIBILIDAD.md).
+
 ## Antes de probar
 
 - Hardware de referencia: **Ryzen 7 5800X, RTX 3060 Ti de 8 GB y 16 GB de RAM**.

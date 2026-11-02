@@ -22,7 +22,7 @@ Entries collect(const fs::path& root, int filter, bool cached, bool recursive) {
 }
 int main(int argc, char** argv) {
     if (argc != 2) return 2;
-    fs::path root = argv[1];
+    fs::path root = fs::absolute(argv[1]);
     if (fs::exists(root)) throw std::runtime_error("Fixture must be new");
     fs::create_directories(root / "nested directory" / "child");
     for (int i=0;i<512;++i) std::ofstream(root / ("file_" + std::to_string(i))).put('x');

@@ -32,6 +32,15 @@ pacman -S --needed --noconfirm \
     mingw-w64-ucrt-x86_64-jbigkit mingw-w64-ucrt-x86_64-xz \
     mingw-w64-ucrt-x86_64-libdeflate mingw-w64-ucrt-x86_64-bzip2
 
+# Separate output directories prevent mixing objects built for different CPUs.
+cpu_profile=${EGLANTINE_CPU_PROFILE:-compatible}
+case "$cpu_profile" in
+    compatible) cpu_flags=(-march=x86-64-v2 -mtune=generic) ;;
+    zen3) cpu_flags=(-march=znver3 -mtune=znver3) ;;
+    *) printf '%s\n' 'EGLANTINE_CPU_PROFILE debe ser compatible o zen3.' >&2; exit 2 ;;
+esac
+build_dir="Eglantine/build/$cpu_profile"
+
 base=6bde8c20d1f7c020a920e59a989c03822a08445d
 if [[ ! -e Eglantine ]]; then
     git clone https://github.com/Djihads80/Eglantine.git Eglantine
@@ -58,7 +67,7 @@ if ! git -C Eglantine apply --reverse --check ../3060ti-security-surface.patch 2
     git -C Eglantine apply ../3060ti-security-surface.patch
 fi
 
-clang++ -std=c++20 -O2 -march=znver3 -Wall -Wextra -Werror \
+clang++ -std=c++20 -O2 "${cpu_flags[@]}" -Wall -Wextra -Werror \
     -I Eglantine/src/video_core/vulkan_common \
     tests/heap_accounting_test.cpp -o tests/heap_accounting_test.exe
 ./tests/heap_accounting_test.exe
@@ -66,7 +75,7 @@ clang++ -std=c++20 -O2 -march=znver3 -Wall -Wextra -Werror \
 # An existing CMake compiler snapshot can override -D cache entries for these tools.
 llvm_ar=$(cygpath -m "$(command -v llvm-ar)")
 llvm_ranlib=$(cygpath -m "$(command -v llvm-ranlib)")
-for compiler_info in Eglantine/build/3060ti/CMakeFiles/*/CMake{C,CXX,ASM}Compiler.cmake; do
+for compiler_info in ${build_dir}/CMakeFiles/*/CMake{C,CXX,ASM}Compiler.cmake; do
     [[ -f "$compiler_info" ]] || continue
     sed -i -E \
         -e "s|^set\\(CMAKE_AR .*|set(CMAKE_AR \"$llvm_ar\")|" \
@@ -81,7 +90,7 @@ if ! git -C Eglantine apply --reverse --check ../3060ti-romfs-loading.patch 2>/d
     git -C Eglantine apply ../3060ti-romfs-loading.patch
 fi
 
-cmake -S Eglantine -B Eglantine/build/3060ti -G Ninja \
+cmake -S Eglantine -B ${build_dir} -G Ninja \
     -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING=OFF -DYUZU_TESTS=OFF \
     -DENABLE_QT=ON -DYUZU_CMD=ON -DYUZU_ROOM=OFF \
     -DUSE_DISCORD_PRESENCE=OFF -DENABLE_UPDATE_CHECKER=OFF \
@@ -95,17 +104,17 @@ cmake -S Eglantine -B Eglantine/build/3060ti -G Ninja \
     "-DCMAKE_RANLIB=$(cygpath -m "$(command -v llvm-ranlib)")" \
     "-DCMAKE_C_COMPILER_AR=$llvm_ar" "-DCMAKE_CXX_COMPILER_AR=$llvm_ar" \
     "-DCMAKE_C_COMPILER_RANLIB=$llvm_ranlib" "-DCMAKE_CXX_COMPILER_RANLIB=$llvm_ranlib" \
-    '-DCMAKE_C_FLAGS=-march=znver3 -mtune=znver3' \
-    '-DCMAKE_CXX_FLAGS=-march=znver3 -mtune=znver3'
-cmake --build Eglantine/build/3060ti --target yuzu yuzu-cmd --parallel 2
+    "-DCMAKE_C_FLAGS=${cpu_flags[*]}" \
+    "-DCMAKE_CXX_FLAGS=${cpu_flags[*]}" -DYUZU_BUILD_PRESET=custom
+cmake --build ${build_dir} --target yuzu yuzu-cmd --parallel 2
 clang++ -std=c++20 -O2 -UNDEBUG -I Eglantine/src \
-    tests/host_memory_windows_test.cpp Eglantine/build/3060ti/src/common/libcommon.a \
+    tests/host_memory_windows_test.cpp ${build_dir}/src/common/libcommon.a \
     -lfmt -lzstd -lws2_32 -lbcrypt -lboost_context-mt -lole32 -luuid -lshell32 -lntdll \
     -o tests/host_memory_windows_test.exe
 ./tests/host_memory_windows_test.exe
 clang++ -std=c++20 -O2 -UNDEBUG -I Eglantine/src \
-    tests/thread_name_test.cpp Eglantine/build/3060ti/src/common/libcommon.a \
+    tests/thread_name_test.cpp ${build_dir}/src/common/libcommon.a \
     -lfmt -lzstd -lws2_32 -lbcrypt -lboost_context-mt -lole32 -luuid -lshell32 -lntdll \
     -o tests/thread_name_test.exe
 ./tests/thread_name_test.exe
-printf '%s\n' 'Compilación terminada: Eglantine/build/3060ti/bin/eglantine.exe'
+printf '%s\n' "Compilación terminada: ${build_dir}/bin/eglantine.exe"
