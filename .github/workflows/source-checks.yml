@@ -24,3 +24,5 @@ jobs:
         run: |
           g++ -std=c++20 -O2 -Wall -Wextra -Werror -I modified/src/video_core/vulkan_common tests/heap_accounting_test.cpp -o work/heap-test
           work/heap-test
+      - name: Test HTTP security fixes with a vulnerable-version control
+        run: python3 tools/check_http_regressions.py

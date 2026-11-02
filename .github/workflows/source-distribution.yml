@@ -1,0 +1,31 @@
+name: Publish corresponding sources only
+on:
+  push:
+    branches: [main]
+    paths:
+      - dependencies/source-distribution.json
+      - tools/collect_distribution_sources.py
+      - .github/workflows/source-distribution.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  sources:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - name: Collect and verify exact source archives
+        run: python3 tools/collect_distribution_sources.py
+      - name: Publish a source-only prerelease
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          tag="security-sources-${GITHUB_SHA:0:12}"
+          printf '%s\n' 'Fuentes correspondientes y recetas; no incluye un ejecutable aprobado. No certifica seguridad ni 60 FPS.' > release-notes.txt
+          gh release create "$tag" --target "$GITHUB_SHA" --prerelease --title "Fuentes y recetas de la revisión de seguridad" --notes-file release-notes.txt Eglantine-3060Ti-16GB-corresponding-sources.zip SOURCE-SHA256SUMS.txt

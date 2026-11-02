@@ -29,7 +29,7 @@ with tempfile.TemporaryDirectory(prefix='eglantine-source-check-',dir=scratch) a
     fixture = Path(temp).resolve()
     assert fixture.is_relative_to(scratch.resolve())
     for name in manifest['modified_paths']:
-        assert name.startswith('src/') and '..' not in Path(name).parts
+        assert (name.startswith('src/') or name == 'cpmfile.json') and '..' not in Path(name).parts
         if name in manifest['new_paths']:
             continue
         content = git(args.upstream,'show',f"{manifest['base']}:{name}",capture_output=True).stdout

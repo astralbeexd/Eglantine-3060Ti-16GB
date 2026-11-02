@@ -53,6 +53,11 @@ for patch_file in 3060ti-memory-experimental.patch 3060ti-mejoras-v2-incremental
 done
 fi
 
+if ! git -C Eglantine apply --reverse --check ../3060ti-security-surface.patch 2>/dev/null; then
+    git -C Eglantine apply --check ../3060ti-security-surface.patch
+    git -C Eglantine apply ../3060ti-security-surface.patch
+fi
+
 clang++ -std=c++20 -O2 -march=znver3 -Wall -Wextra -Werror \
     -I Eglantine/src/video_core/vulkan_common \
     tests/heap_accounting_test.cpp -o tests/heap_accounting_test.exe
@@ -76,6 +81,7 @@ cmake -S Eglantine -B Eglantine/build/3060ti -G Ninja \
     -DENABLE_QT=ON -DYUZU_CMD=ON -DYUZU_ROOM=OFF \
     -DUSE_DISCORD_PRESENCE=OFF -DENABLE_UPDATE_CHECKER=OFF \
     -DEGLANTINE_NX2_PGO=OFF \
+    -DHTTPLIB_USE_NON_BLOCKING_GETADDRINFO=OFF \
     -DEGLANTINE_RENDERER_LTO=ON \
     -DYUZU_USE_BUNDLED_QT=OFF -DYUZU_USE_BUNDLED_FFMPEG=OFF \
     -DYUZU_USE_EXTERNAL_FFMPEG=OFF -DCMAKE_C_COMPILER=clang \

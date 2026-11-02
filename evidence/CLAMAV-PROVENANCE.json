@@ -1,0 +1,7 @@
+{
+  "source": "https://www.clamav.net/downloads/production/clamav-1.5.4.win.x64.zip",
+  "sha256": "0d9e0228b2674137ea1a2853566c98a0278ad52ab2582c3d6dbd75373848c395",
+  "signer_fingerprint": "5BADCA2665EF59DCF8A23D8B707F0DB480836771",
+  "detached_signature_valid": true,
+  "key_source": "https://raw.githubusercontent.com/Cisco-Talos/clamav-documentation/main/src/manual/cisco-talos.gpg"
+}

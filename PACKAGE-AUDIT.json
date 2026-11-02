@@ -19,5 +19,6 @@
   },
   "gameplay_test": "short_6000_presents_race_visual_test_passed",
   "independently_audited": false,
-  "corresponding_sources_complete": false
+  "corresponding_sources_complete": false,
+  "candidate_scope": "initial candidate before dependency security rebuild"
 }

@@ -1,0 +1,26 @@
+{
+  "engine": "ClamAV",
+  "version": "1.5.4",
+  "exit_code": 0,
+  "infected_files": 0,
+  "scanned_files": 287,
+  "known_signatures": 3628245,
+  "duration_seconds": 190.144,
+  "scan_local_date": "2026-11-01",
+  "definitions_updated": true,
+  "limits": {
+    "max_file_mib": 1024,
+    "max_scan_mib": 2048,
+    "max_files": 100000,
+    "alert_exceeds_max": true
+  },
+  "limitations": [
+    "Known malware signatures are not a vulnerability audit",
+    "Applies only to these hashes and the scanned files",
+    "No guarantee of absence of malware"
+  ],
+  "archive_sha256": {
+    "Eglantine-3060Ti-16GB-portable-review-candidate.zip": "b0aa556e454bfd295a6f98b8c371d0ba27498f170d89a8580dc16144ba9f1747",
+    "Eglantine-3060Ti-16GB-source-with-checks.zip": "d0d8b6b7ae0314642f31c62f0c0eea71ad6d1932b34c03a0263eb81fca160bec"
+  }
+}

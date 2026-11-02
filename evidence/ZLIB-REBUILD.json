@@ -1,0 +1,15 @@
+{
+  "upstream": "https://github.com/madler/zlib",
+  "commit": "6be4bcda3da1d28b18a081c884b141a88a7cb84d",
+  "source_url": "https://codeload.github.com/madler/zlib/tar.gz/6be4bcda3da1d28b18a081c884b141a88a7cb84d",
+  "source_sha256": "791d3769f92102b4b83a790971d400c8440e0cbe4823276319a1bdad32551a15",
+  "tests": "upstream CTest suite passed",
+  "fixed_commit": "df84af25dc1942490e1d1c899a07619152a46148",
+  "cves": [
+    "CVE-2026-76844",
+    "CVE-2026-85091"
+  ],
+  "binaries": {
+    "libz.dll": "2d5ba387eab9eed02ff1ddf5d23a199d72d817993eb36472bd9fa2ed260401e8"
+  }
+}

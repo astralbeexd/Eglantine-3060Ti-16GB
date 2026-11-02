@@ -13,7 +13,8 @@ Las comprobaciones estructurales PE, los hashes y una prueba de arranque tampoco
 el análisis antivirus ni la revisión de vulnerabilidades.
 
 El intento de análisis local con Microsoft Defender falló con `0x80508023`.
-Por tanto no se publica una afirmación de “antivirus limpio” ni “sin vulnerabilidades”.
+Después se analizó el candidato inicial con ClamAV 1.5.4: 287 archivos y cero detecciones.
+Los cambios posteriores requieren otro análisis del paquete final. No se afirma ausencia de vulnerabilidades.
 No se han desactivado protecciones de Windows ni añadido exclusiones para ejecutar la build.
 
 ## Uso

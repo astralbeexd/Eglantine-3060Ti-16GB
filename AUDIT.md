@@ -1,3 +1,5 @@
+> Registro histórico del candidato inicial, anterior a las nuevas correcciones de dependencias. Estado actual: [SECURITY-REVIEW.md](SECURITY-REVIEW.md).
+
 # Verificaciones del candidato portátil
 
 Pruebas locales del 1 de noviembre de 2026. Esto es evidencia limitada, no certificación de seguridad.

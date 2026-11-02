@@ -5,11 +5,11 @@
   "runtime_files_match_installed_packages": "passed",
   "portable_startup_smoke_test": "passed_30_seconds_without_msys2_modules",
   "full_game_test_of_new_packaging": "short_race_visual_test_6000_presents_passed_not_full_game_validation",
-  "antivirus_scan": "failed_0x80508023_no_result",
+  "antivirus_scan": "initial_candidate_clamav_1.5.4_passed; final_rebuilt_candidate_pending",
   "authenticode_signature": "not_signed",
-  "corresponding_dependency_sources": "incomplete",
+  "corresponding_dependency_sources": "82 MSYS source archives plus CPM sources collected; public source-only distribution in progress",
   "independent_security_review": "not_performed",
-  "vulnerability_scan": "not_completed",
+  "vulnerability_scan": "initial review completed with findings; fixes and final package validation in progress",
   "malware_free_certification": false,
   "guaranteed_60_fps": false
 }

@@ -8,8 +8,11 @@
   ],
   "renderer_thinlto": true,
   "pgo": false,
-  "binaries": {
+  "binaries": null,
+  "previously_tested_binary_hashes": {
     "eglantine.exe": "04b788c820d68a89afddb72cf28b5ed4816ee30c1d3cb7d32f33dfccabd637a8",
     "eden-cli.exe": "4bb922862591a23ffd2109cfd0356484bf78806453e9b57e0d960a29887a688a"
-  }
+  },
+  "current_source_status": "security rebuild in progress; new binary hashes pending",
+  "http_library": "cpp-httplib v0.51.0"
 }
