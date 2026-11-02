@@ -46,8 +46,9 @@ contiene tu configuración y puede contener partidas y archivos de consola.
 
 ## Compatibilidad con otros equipos
 
-El ZIP publicado actualmente sigue siendo la edición **Zen 3**. Se está preparando una
-edición genérica para más procesadores; todavía no se anuncia como descargable.
+El ZIP publicado actualmente sigue siendo la edición **Zen 3**. Ya se compiló un candidato
+genérico x86-64-v2 y pasó la prueba de arranque en Windows 11. Su validación en otros CPU,
+en Windows 10 y en una carrera completa sigue pendiente; aún no tiene una release binaria pública.
 Consulta [qué CPU y sistemas operativos están probados y cuáles siguen pendientes](COMPATIBILIDAD.md).
 
 ## Antes de probar

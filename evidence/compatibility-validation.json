@@ -1,0 +1,33 @@
+{
+  "startup": {
+    "startup_alive": true,
+    "stop_reason": "planned_startup_test_end",
+    "game_started": false,
+    "cpu_os_preflight": "cpu_x86_64_v2=1 windows_build=26300 os_target_ok=1",
+    "loaded_module_count": 149,
+    "msys2_modules_loaded": false,
+    "initial_memory_mib": {
+      "available": 7251.9,
+      "commit_available": 7007.0
+    },
+    "minimum_commit_available_mib": 2742.6,
+    "startup_scope": "8 seconds, clean profile, no keys/firmware/game; initial-content prompts may be present"
+  },
+  "cpu_feature_guard_test": "passed, simulated missing required features",
+  "heap_accounting_test": "passed, 2097152 combinations and boundaries",
+  "windows_host_memory_test": "passed: 24 alias, 24 fallback, 24 move/replace; handles 138 to 138",
+  "thread_description_test": "passed",
+  "portability_ci": {
+    "run": 41528200381,
+    "windows": "passed",
+    "linux": "passed",
+    "macos": "passed",
+    "scope": "source verification and small standalone tests; not full emulator builds"
+  },
+  "limitations": [
+    "No game benchmark for this binary",
+    "No Xeon hardware test",
+    "No Windows 10 hardware test",
+    "No native Linux/macOS package"
+  ]
+}
