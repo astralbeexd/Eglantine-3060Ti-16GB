@@ -1,0 +1,96 @@
+diff --git a/src/video_core/texture_cache/texture_cache.h b/src/video_core/texture_cache/texture_cache.h
+index 33ca051..d27aba1 100644
+--- a/src/video_core/texture_cache/texture_cache.h
++++ b/src/video_core/texture_cache/texture_cache.h
+@@ -176,10 +176,14 @@ void TextureCache<P>::RunGarbageCollector() {
+         return false;
+     };
+     Configure(false);
+-    lru_cache.ForEachItemBelow(frame_tick - ticks_to_destroy, Cleanup);
++    if (frame_tick >= ticks_to_destroy) {
++        lru_cache.ForEachItemBelow(frame_tick - ticks_to_destroy, Cleanup);
++    }
+     if (total_used_memory >= critical_memory) {
+         Configure(true);
+-        lru_cache.ForEachItemBelow(frame_tick - ticks_to_destroy, Cleanup);
++        if (frame_tick >= ticks_to_destroy) {
++            lru_cache.ForEachItemBelow(frame_tick - ticks_to_destroy, Cleanup);
++        }
+     }
+ }
+ 
+diff --git a/src/video_core/vulkan_common/heap_accounting.h b/src/video_core/vulkan_common/heap_accounting.h
+new file mode 100644
+index 0000000..fc171bf
+--- /dev/null
++++ b/src/video_core/vulkan_common/heap_accounting.h
+@@ -0,0 +1,18 @@
++// SPDX-License-Identifier: GPL-3.0-or-later
++
++#pragma once
++
++#include <algorithm>
++#include <cstdint>
++#include <limits>
++
++namespace Vulkan {
++
++constexpr std::uint64_t AccountHeapUsage(
++    std::uint64_t driver_usage, std::uint64_t block_bytes, std::uint64_t allocation_bytes,
++    std::uint64_t slack_limit = std::numeric_limits<std::uint64_t>::max()) {
++    const auto unused = block_bytes - (std::min)(block_bytes, allocation_bytes);
++    return driver_usage - (std::min)({driver_usage, unused, slack_limit});
++}
++
++} // namespace Vulkan
+diff --git a/src/video_core/vulkan_common/vulkan_device.cpp b/src/video_core/vulkan_common/vulkan_device.cpp
+index b65c721..0c7a438 100644
+--- a/src/video_core/vulkan_common/vulkan_device.cpp
++++ b/src/video_core/vulkan_common/vulkan_device.cpp
+@@ -28,6 +28,7 @@
+ #include "common/settings.h"
+ #include "common/settings_enums.h"
+ #include "video_core/vulkan_common/nsight_aftermath_tracker.h"
++#include "video_core/vulkan_common/heap_accounting.h"
+ #include "video_core/vulkan_common/vma.h"
+ #include "video_core/vulkan_common/vulkan_device.h"
+ #include "video_core/vulkan_common/vulkan_wrapper.h"
+@@ -417,8 +418,7 @@ std::filesystem::path StaticPipelineCacheFilename() {
+ // (title 1).
+ u64 AllocatedUsage(VkDeviceSize driver_usage, const VmaBudget& vma_budget) {
+     const VmaStatistics& statistics = vma_budget.statistics;
+-    const u64 unused = statistics.blockBytes - statistics.allocationBytes;
+-    return driver_usage - (std::min)(driver_usage, unused);
++    return AccountHeapUsage(driver_usage, statistics.blockBytes, statistics.allocationBytes);
+ }
+ 
+ } // Anonymous namespace
+@@ -1629,6 +1629,11 @@ void Device::ReleaseCustomBorderColorSamplers(size_t count) const {
+ }
+ 
+ u64 Device::GetDeviceMemoryUsage() const {
++    using namespace Common::Literals;
++    static const bool small_vram_profile = [] {
++        const char* value = std::getenv("EDEN_NX2_SMALL_VRAM_PROFILE");
++        return value != nullptr && value[0] == '1';
++    }();
+     VkPhysicalDeviceMemoryBudgetPropertiesEXT budget{};
+     budget.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_MEMORY_BUDGET_PROPERTIES_EXT;
+     physical.GetMemoryProperties(&budget);
+@@ -1638,7 +1643,15 @@ u64 Device::GetDeviceMemoryUsage() const {
+     }
+     u64 result{};
+     for (const size_t heap : valid_heap_memory) {
+-        result += AllocatedUsage(budget.heapUsage[heap], heap_budgets[heap]);
++        if (small_vram_profile && Settings::CurrentProgramIsSwitch2() && heap == main_heap &&
++            GetDriverID() == VK_DRIVER_ID_NVIDIA_PROPRIETARY) {
++            // Bound the reservation hidden from the collector on memory-constrained cards.
++            const auto& stats = heap_budgets[heap].statistics;
++            result += AccountHeapUsage(budget.heapUsage[heap], stats.blockBytes,
++                                       stats.allocationBytes, 256_MiB);
++        } else {
++            result += AllocatedUsage(budget.heapUsage[heap], heap_budgets[heap]);
++        }
+     }
+     return result;
+ }

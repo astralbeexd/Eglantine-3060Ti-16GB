@@ -1,0 +1,15 @@
+{
+  "base": "6bde8c20d1f7c020a920e59a989c03822a08445d",
+  "shader_reuse": "0ae093058ec2a890429853f231a4c757523455b2",
+  "compiler": "Clang 23.1.4",
+  "flags": [
+    "-march=znver3",
+    "-mtune=znver3"
+  ],
+  "renderer_thinlto": true,
+  "pgo": false,
+  "binaries": {
+    "eglantine.exe": "04b788c820d68a89afddb72cf28b5ed4816ee30c1d3cb7d32f33dfccabd637a8",
+    "eden-cli.exe": "4bb922862591a23ffd2109cfd0356484bf78806453e9b57e0d960a29887a688a"
+  }
+}

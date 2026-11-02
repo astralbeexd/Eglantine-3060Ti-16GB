@@ -1,0 +1,759 @@
+diff --git a/src/common/host_memory.cpp b/src/common/host_memory.cpp
+index 75a9da8..ae4ee17 100644
+--- a/src/common/host_memory.cpp
++++ b/src/common/host_memory.cpp
+@@ -53,6 +53,7 @@
+ 
+ #include <mutex>
+ #include <random>
++#include <utility>
+ 
+ #include "common/alignment.h"
+ #include "common/assert.h"
+@@ -145,9 +146,26 @@ public:
+         }
+ 
+         // Allocate backing file map
+-        backing_handle = pfn_CreateFileMapping2(INVALID_HANDLE_VALUE, nullptr, FILE_MAP_WRITE | FILE_MAP_READ, PAGE_READWRITE, SEC_COMMIT, backing_size, nullptr, nullptr, 0);
++        DWORD backing_error{};
++        for (u32 attempt = 0; attempt <= 10; ++attempt) {
++            backing_handle = pfn_CreateFileMapping2(INVALID_HANDLE_VALUE, nullptr,
++                FILE_MAP_WRITE | FILE_MAP_READ, PAGE_READWRITE, SEC_COMMIT, backing_size,
++                nullptr, nullptr, 0);
++            if (backing_handle) {
++                if (attempt != 0) {
++                    LOG_INFO(HW_Memory, "Fastmem backing recovered after {} commit-limit retries", attempt);
++                }
++                break;
++            }
++            backing_error = GetLastError();
++            if (backing_error != ERROR_COMMITMENT_LIMIT || attempt == 10) {
++                break;
++            }
++            // A system-managed page file may still be growing after the first request fails.
++            Sleep(100);
++        }
+         if (!backing_handle) {
+-            LOG_CRITICAL(HW_Memory, "Failed to allocate {} MiB of backing memory", backing_size >> 20);
++            LOG_CRITICAL(HW_Memory, "Failed to allocate {} MiB of backing memory, Windows error {}", backing_size >> 20, backing_error);
+             return false;
+         }
+         // Allocate a virtual memory for the backing file map as placeholder
+@@ -164,6 +182,7 @@ public:
+             LOG_CRITICAL(HW_Memory, "Failed to map {} MiB of virtual memory", backing_size >> 20);
+             return false;
+         }
++        backing_mapped = true;
+         // Allocate virtual address placeholder
+         virtual_base = static_cast<u8*>(pfn_VirtualAlloc2(process, nullptr, virtual_size, MEM_RESERVE | MEM_RESERVE_PLACEHOLDER, PAGE_NOACCESS, nullptr, 0));
+         if (!virtual_base) {
+@@ -258,20 +277,28 @@ private:
+             if (!VirtualFree(virtual_base, 0, MEM_RELEASE)) {
+                 LOG_CRITICAL(HW_Memory, "Failed to free virtual memory");
+             }
++            virtual_base = nullptr;
+         }
+         if (backing_base) {
+-            if (!pfn_UnmapViewOfFile2(process, backing_base, MEM_PRESERVE_PLACEHOLDER)) {
++            if (backing_mapped && !pfn_UnmapViewOfFile2(process, backing_base, MEM_PRESERVE_PLACEHOLDER)) {
+                 LOG_CRITICAL(HW_Memory, "Failed to unmap backing memory placeholder");
+             }
+             if (!VirtualFreeEx(process, backing_base, 0, MEM_RELEASE)) {
+                 LOG_CRITICAL(HW_Memory, "Failed to free backing memory");
+             }
++            backing_base = nullptr;
++            backing_mapped = false;
+         }
+-        if (!CloseHandle(backing_handle)) {
+-            LOG_CRITICAL(HW_Memory, "Failed to free backing memory file handle");
++        if (backing_handle) {
++            if (!CloseHandle(backing_handle)) {
++                LOG_CRITICAL(HW_Memory, "Failed to free backing memory file handle");
++            }
++            backing_handle = nullptr;
+         }
+     }
+ 
++    bool backing_mapped{};
++
+     /// Unmap one placeholder in the given range (partial unmaps are supported)
+     /// Return true when there are no more placeholders to unmap
+     bool UnmapOnePlaceholder(size_t virtual_offset, size_t length) {
+@@ -736,7 +763,7 @@ HostMemory::HostMemory(size_t backing_size_, size_t virtual_size_)
+ HostMemory::~HostMemory() {
+ #ifdef _WIN32
+     if (fallback_buffer) {
+-        VirtualFree(backing_base, backing_size, MEM_RELEASE);
++        VirtualFree(backing_base, 0, MEM_RELEASE);
+     }
+ #else
+     if (fallback_buffer) {
+@@ -745,9 +772,28 @@ HostMemory::~HostMemory() {
+ #endif
+ }
+ 
+-HostMemory::HostMemory(HostMemory&&) noexcept = default;
++HostMemory::HostMemory(HostMemory&& other) noexcept {
++    Swap(other);
++}
++
++HostMemory& HostMemory::operator=(HostMemory&& other) noexcept {
++    HostMemory moved{std::move(other)};
++    Swap(moved);
++    return *this;
++}
+ 
+-HostMemory& HostMemory::operator=(HostMemory&&) noexcept = default;
++void HostMemory::Swap(HostMemory& other) noexcept {
++    using std::swap;
++    swap(backing_size, other.backing_size);
++    swap(virtual_size, other.virtual_size);
++#if !(defined(__OPENORBIS__) || defined(__managarm__))
++    swap(impl, other.impl);
++#endif
++    swap(backing_base, other.backing_base);
++    swap(virtual_base, other.virtual_base);
++    swap(virtual_base_offset, other.virtual_base_offset);
++    swap(fallback_buffer, other.fallback_buffer);
++}
+ 
+ void HostMemory::Map(size_t virtual_offset, size_t host_offset, size_t length, MemoryPermission perms, bool separate_heap) {
+ #if !(defined(__OPENORBIS__) || defined(__managarm__))
+diff --git a/src/common/host_memory.h b/src/common/host_memory.h
+index 8747a18..c98d4f5 100644
+--- a/src/common/host_memory.h
++++ b/src/common/host_memory.h
+@@ -77,6 +77,8 @@ public:
+     }
+ 
+ private:
++    void Swap(HostMemory& other) noexcept;
++
+     size_t backing_size{};
+     size_t virtual_size{};
+ 
+diff --git a/src/common/thread.cpp b/src/common/thread.cpp
+index 7b4dec3..a979d06 100644
+--- a/src/common/thread.cpp
++++ b/src/common/thread.cpp
+@@ -504,7 +504,7 @@ void SetCurrentThreadPriority(ThreadPriority new_priority) {
+ }
+ 
+ void SetCurrentThreadName(const char* name) {
+-#ifdef _MSC_VER
++#ifdef _WIN32
+     // Sets the debugger-visible name of the current thread.
+     if (auto pf = (decltype(&SetThreadDescription))(void*)GetProcAddress(GetModuleHandle(TEXT("KernelBase.dll")), "SetThreadDescription"); pf)
+         pf(GetCurrentThread(), UTF8ToUTF16W(name).data()); // Windows 10+
+@@ -529,11 +529,6 @@ void SetCurrentThreadName(const char* name) {
+         buf[len] = '\0';
+         pthread_setname_np(pthread_self(), buf);
+     }
+-#elif defined(_WIN32)
+-    // MinGW with the POSIX threading model does not support pthread_setname_np
+-    // See for reference
+-    // https://gitlab.freedesktop.org/mesa/mesa/-/blame/main/src/util/u_thread.c?ref_type=heads#L75
+-    (void)name;
+ #else
+     pthread_setname_np(pthread_self(), name);
+ #endif
+diff --git a/src/core/hle/service/am/service/self_controller.cpp b/src/core/hle/service/am/service/self_controller.cpp
+index a8078e6..66a1c32 100644
+--- a/src/core/hle/service/am/service/self_controller.cpp
++++ b/src/core/hle/service/am/service/self_controller.cpp
+@@ -4,6 +4,7 @@
+ // SPDX-FileCopyrightText: Copyright 2024 yuzu Emulator Project
+ // SPDX-License-Identifier: GPL-2.0-or-later
+ 
++#include <cstdlib>
+ #include "common/logging.h"
+ #include "core/hle/result.h"
+ #include "core/hle/service/am/am_results.h"
+@@ -79,6 +80,15 @@ ISelfController::ISelfController(Core::System& system_, std::shared_ptr<Applet>
+     // clang-format on
+ 
+     RegisterHandlers(functions);
++    const char* legacy_stub = std::getenv("EDEN_NX2_SELF2400_FALLBACK");
++    if (process != nullptr && process->IsSwitch2() &&
++        (legacy_stub == nullptr || legacy_stub[0] != '1')) {
++        static const FunctionInfo nx2_functions[] = {
++            {2400, D<&ISelfController::Unknown2400>, "Unknown2400"},
++        };
++        RegisterHandlers(nx2_functions);
++        LOG_WARNING(Service_AM, "(STUBBED) Switch 2 ISelfController::2400 returns success");
++    }
+ 
+     std::scoped_lock lk{m_applet->lock};
+     m_applet->display_layer_manager.Initialize(system, m_process, m_applet->applet_id,
+@@ -91,6 +101,11 @@ void ISelfController::GetNx2GraphicsSystemSession(HLERequestContext& ctx) {
+     ReturnRawSession(system, ctx, std::make_shared<INx2GraphicsSystemSession>(system));
+ }
+ 
++Result ISelfController::Unknown2400() {
++    // Preserve the automatic stub's response without formatting a report every frame.
++    R_SUCCEED();
++}
++
+ ISelfController::~ISelfController() {
+     std::scoped_lock lk{m_applet->lock};
+     m_applet->display_layer_manager.Finalize();
+diff --git a/src/core/hle/service/am/service/self_controller.h b/src/core/hle/service/am/service/self_controller.h
+index 221fbb0..de98568 100644
+--- a/src/core/hle/service/am/service/self_controller.h
++++ b/src/core/hle/service/am/service/self_controller.h
+@@ -31,6 +31,7 @@ public:
+ 
+ private:
+     void GetNx2GraphicsSystemSession(HLERequestContext& ctx);
++    Result Unknown2400();
+     Result Exit();
+     Result LockExit();
+     Result UnlockExit();
+diff --git a/src/core/hle/service/nx2_gsv.h b/src/core/hle/service/nx2_gsv.h
+index 628bded..8dc0900 100644
+--- a/src/core/hle/service/nx2_gsv.h
++++ b/src/core/hle/service/nx2_gsv.h
+@@ -1485,6 +1485,12 @@ private:
+                 m_stats.frame_us += frame;
+                 m_stats.max_frame_us = (std::max)(m_stats.max_frame_us, frame);
+                 m_stats.hitches += frame > 100'000 ? 1 : 0;
++                static const bool pacing_stats =
++                    std::getenv("EDEN_NX2_FRAME_PACING_STATS") != nullptr;
++                if (pacing_stats && m_stats.interval_count < m_stats.intervals.size()) {
++                    m_stats.intervals[m_stats.interval_count++] =
++                        static_cast<u32>((std::min)(frame, 0xffffffffLL));
++                }
+             }
+             m_stats.last_present = entered;
+             if (++m_stats.presents == 600) {
+@@ -1495,6 +1501,21 @@ private:
+                          m_stats.frame_us / 599, m_stats.max_frame_us, m_stats.hitches,
+                          m_stats.fence_us / 600, m_stats.max_fence_us, m_stats.composite_us / 600,
+                          m_stats.pace_us / 600);
++                if (m_stats.interval_count != 0) {
++                    auto intervals = m_stats.intervals;
++                    const auto end = intervals.begin() + m_stats.interval_count;
++                    std::sort(intervals.begin(), end);
++                    const auto count_over = [&](u32 limit) {
++                        return std::count_if(intervals.begin(), end,
++                                             [=](u32 value) { return value > limit; });
++                    };
++                    LOG_INFO(Service, "NX2 pacing {} intervals: median {} us; p95 {} us; p99 {} us; "
++                                      "over 16.7ms {}; over 25ms {}; over 33.4ms {}",
++                             m_stats.interval_count, intervals[m_stats.interval_count / 2],
++                             intervals[m_stats.interval_count * 95 / 100],
++                             intervals[m_stats.interval_count * 99 / 100],
++                             count_over(16'700), count_over(25'000), count_over(33'400));
++                }
+                 m_stats = {.last_present = entered};
+             }
+         }
+@@ -1513,6 +1534,8 @@ private:
+         long long frame_us{}, fence_us{}, composite_us{}, pace_us{}, max_fence_us{};
+         long long max_frame_us{}, hitches{};
+         u32 presents{};
++        std::array<u32, 600> intervals{};
++        size_t interval_count{};
+         std::chrono::steady_clock::time_point last_present{};
+     } m_stats{};
+     u32 m_previous_fence_id{~0U}; // none yet (WaitForFrame ignores ids >= 192)
+@@ -1673,7 +1696,9 @@ private:
+         if (directory == nullptr || (m_presents % 120) != 1 || m_capture_pending->exchange(true)) {
+             return;
+         }
+-        const auto layout = Layout::DefaultFrameLayout(1280, 720);
++        static const bool capture_1080 = std::getenv("EDEN_NX2_CAPTURE_1080") != nullptr;
++        const auto layout = Layout::DefaultFrameLayout(capture_1080 ? 1920 : 1280,
++                                                       capture_1080 ? 1080 : 720);
+         auto pixels = std::make_shared<std::vector<u8>>(layout.width * layout.height * 4);
+         const std::string path =
+             fmt::format("{}/nx2-frame-{:05}.tga", directory, m_presents);
+diff --git a/src/core/hle/service/service.cpp b/src/core/hle/service/service.cpp
+index 1490af0..3943901 100644
+--- a/src/core/hle/service/service.cpp
++++ b/src/core/hle/service/service.cpp
+@@ -67,6 +67,46 @@ void ServiceFrameworkBase::RegisterHandlersBaseTipc(const FunctionInfoBase* func
+ 
+ void ServiceFrameworkBase::ReportUnimplementedFunction(HLERequestContext& ctx,
+                                                        const FunctionInfoBase* info) {
++    const auto* const caller = ctx.GetThread().GetOwnerProcess();
++    const bool nx2_stub = std::string_view{service_name}.starts_with(Nx2StubPrefix) ||
++                          (caller != nullptr && caller->IsSwitch2());
++    static const bool repeat_stub_logs = [] {
++        const char* value = std::getenv("EDEN_NX2_REPEAT_STUB_LOGS");
++        return value != nullptr && value[0] == '1';
++    }();
++    static const bool ipc_trace = std::getenv("EDEN_NX2_IPC_TRACE") != nullptr;
++    if (nx2_stub && !repeat_stub_logs && !ipc_trace && !Settings::values.use_debug_asserts &&
++        !Settings::values.reporting_services.GetValue()) {
++        bool suppress{};
++        bool first_suppressed{};
++        {
++            static std::mutex mutex;
++            static std::map<std::pair<std::string, u32>, u32> reports;
++            std::scoped_lock lock{mutex};
++            const auto key = std::pair{std::string{service_name}, ctx.GetCommand()};
++            auto entry = reports.find(key);
++            if (entry == reports.end() && reports.size() < 512) {
++                entry = reports.emplace(key, 0).first;
++            }
++            if (entry != reports.end()) {
++                first_suppressed = entry->second == 4;
++                suppress = entry->second >= 4;
++                if (entry->second < 5) {
++                    ++entry->second;
++                }
++            }
++        }
++        if (suppress) {
++            if (first_suppressed) {
++                LOG_WARNING(Service, "Repeated auto-stub reports for {}::{} suppressed; "
++                            "EDEN_NX2_REPEAT_STUB_LOGS=1 restores them",
++                            service_name, ctx.GetCommand());
++            }
++            IPC::ResponseBuilder rb{ctx, 2};
++            rb.Push(ResultSuccess);
++            return;
++        }
++    }
+     auto cmd_buf = ctx.CommandBuffer();
+     std::string function_name = info == nullptr ? "<unknown>" : info->name;
+ 
+@@ -83,7 +123,6 @@ void ServiceFrameworkBase::ReportUnimplementedFunction(HLERequestContext& ctx,
+     // EDEN_NX2_AUTO_STUB=1 auto-stubs every unknown command without touching the config. Switch 2
+     // programs are always auto-stubbed: they still call many commands nobody has implemented.
+     static const bool env_auto_stub = std::getenv("EDEN_NX2_AUTO_STUB") != nullptr;
+-    const auto* const caller = ctx.GetThread().GetOwnerProcess();
+     if (Settings::values.use_auto_stub || env_auto_stub ||
+         std::string_view{service_name}.starts_with(Nx2StubPrefix) ||
+         (caller != nullptr && caller->IsSwitch2())) {
+diff --git a/src/input_common/drivers/tas_input.cpp b/src/input_common/drivers/tas_input.cpp
+index 32febc0..be65986 100644
+--- a/src/input_common/drivers/tas_input.cpp
++++ b/src/input_common/drivers/tas_input.cpp
+@@ -5,6 +5,7 @@
+ // SPDX-License-Identifier: GPL-2.0-or-later
+ 
+ #include <cstring>
++#include <cstdlib>
+ #include <sstream>
+ #include <fmt/ranges.h>
+ 
+@@ -79,6 +80,11 @@ void Tas::LoadTasFiles() {
+             script_length = commands[i].size();
+         }
+     }
++    const char* autostart = std::getenv("EDEN_NX2_TAS_AUTOSTART");
++    if (!benchmark_autostart_done && autostart != nullptr && autostart[0] == '1') {
++        is_running = script_length != 0;
++        benchmark_autostart_done = true;
++    }
+ }
+ 
+ void Tas::LoadTasFile(size_t player_index, size_t file_index) {
+diff --git a/src/input_common/drivers/tas_input.h b/src/input_common/drivers/tas_input.h
+index 5be66d1..bb7e3a7 100644
+--- a/src/input_common/drivers/tas_input.h
++++ b/src/input_common/drivers/tas_input.h
+@@ -191,6 +191,7 @@ private:
+     size_t script_length{0};
+     bool is_recording{false};
+     bool is_running{false};
++    bool benchmark_autostart_done{false};
+     bool needs_reset{false};
+     std::array<std::vector<TASCommand>, PLAYER_NUMBER> commands{};
+     std::vector<TASCommand> record_commands{};
+diff --git a/src/video_core/CMakeLists.txt b/src/video_core/CMakeLists.txt
+index 5ed43fc..aff33d3 100644
+--- a/src/video_core/CMakeLists.txt
++++ b/src/video_core/CMakeLists.txt
+@@ -497,3 +497,39 @@ if (ANDROID AND ARCHITECTURE_arm64)
+ endif()
+ 
+ create_target_directory_groups(video_core)
++
++option(EGLANTINE_RENDERER_LTO "Use ThinLTO for the Windows renderer with Clang/LLD" OFF)
++if (EGLANTINE_RENDERER_LTO)
++    if (NOT WIN32 OR NOT CMAKE_CXX_COMPILER_ID STREQUAL "Clang" OR
++        NOT CMAKE_EXE_LINKER_FLAGS MATCHES "-fuse-ld=lld")
++        message(FATAL_ERROR "EGLANTINE_RENDERER_LTO requires Clang and LLD on Windows")
++    endif()
++    include(CheckIPOSupported)
++    set(renderer_saved_cxx_flags "${CMAKE_CXX_FLAGS}")
++    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fuse-ld=lld")
++    check_ipo_supported(RESULT renderer_ipo_supported OUTPUT renderer_ipo_error LANGUAGES CXX)
++    set(CMAKE_CXX_FLAGS "${renderer_saved_cxx_flags}")
++    if (NOT renderer_ipo_supported)
++        message(FATAL_ERROR "Renderer IPO is unavailable: ${renderer_ipo_error}")
++    endif()
++    set_property(TARGET video_core PROPERTY INTERPROCEDURAL_OPTIMIZATION TRUE)
++    target_link_options(video_core INTERFACE "LINKER:--thinlto-jobs=1")
++endif()
++
++option(EGLANTINE_NX2_PGO "Use the bundled execution profile for hot NX2 renderer sources" OFF)
++set(EGLANTINE_NX2_PGO_PROFILE "${CMAKE_SOURCE_DIR}/eglantine.profdata" CACHE FILEPATH
++    "LLVM execution profile for NX2 renderer optimization")
++if (EGLANTINE_NX2_PGO)
++    if (NOT CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
++        message(FATAL_ERROR "EGLANTINE_NX2_PGO requires Clang")
++    endif()
++    if (NOT EXISTS "${EGLANTINE_NX2_PGO_PROFILE}")
++        message(FATAL_ERROR "The requested NX2 execution profile does not exist")
++    endif()
++    set_property(SOURCE
++        engines/maxwell_3d.cpp engines/puller.cpp gpu_split.cpp
++        renderer_vulkan/vk_rasterizer.cpp renderer_vulkan/vk_texture_cache.cpp
++        texture_cache/texture_cache.cpp buffer_cache/buffer_cache.cpp
++        APPEND PROPERTY COMPILE_OPTIONS
++        "-fprofile-use=${EGLANTINE_NX2_PGO_PROFILE}" "-Wno-profile-instr-unprofiled")
++endif()
+diff --git a/src/video_core/renderer_opengl/gl_shader_cache.cpp b/src/video_core/renderer_opengl/gl_shader_cache.cpp
+index 277cf22..ac750ab 100644
+--- a/src/video_core/renderer_opengl/gl_shader_cache.cpp
++++ b/src/video_core/renderer_opengl/gl_shader_cache.cpp
+@@ -578,7 +578,8 @@ std::unique_ptr<ComputePipeline> ShaderCache::CreateComputePipeline(
+     const ComputePipelineKey& key, const VideoCommon::ShaderInfo* shader) {
+     const GPUVAddr program_base{kepler_compute->regs.code_loc.Address()};
+     const auto& qmd{kepler_compute->launch_description};
+-    ComputeEnvironment env{*kepler_compute, *gpu_memory, program_base, qmd.program_start};
++    ComputeEnvironment env{*kepler_compute, *gpu_memory, program_base, qmd.program_start,
++                           shader->lowered_native};
+     env.SetCachedSize(shader->size_bytes);
+ 
+     main_pools.ReleaseContents();
+diff --git a/src/video_core/renderer_vulkan/vk_pipeline_cache.cpp b/src/video_core/renderer_vulkan/vk_pipeline_cache.cpp
+index 05511c1..23974d1 100644
+--- a/src/video_core/renderer_vulkan/vk_pipeline_cache.cpp
++++ b/src/video_core/renderer_vulkan/vk_pipeline_cache.cpp
+@@ -7,6 +7,7 @@
+ #include <algorithm>
+ #include <chrono>
+ #include <cstddef>
++#include <cstdlib>
+ #include <fstream>
+ #include <iostream>
+ #include <memory>
+@@ -321,6 +322,17 @@ size_t GetTotalPipelineWorkers() {
+     }
+     return std::min(max_core_threads, desired);
+ #else
++    if (const char* text = std::getenv("EDEN_NX2_PIPELINE_WORKERS")) {
++        char* end{};
++        const auto requested = std::strtoull(text, &end, 10);
++        if (end != text && *end == '\0' && requested >= 1 && requested <= 64) {
++            const auto count = std::min(max_core_threads, static_cast<size_t>(requested));
++            LOG_INFO(Render_Vulkan, "Pipeline worker limit: {} (hardware default {})", count,
++                     max_core_threads);
++            return count;
++        }
++        LOG_WARNING(Render_Vulkan, "Invalid EDEN_NX2_PIPELINE_WORKERS; using the default worker count");
++    }
+     return max_core_threads;
+ #endif
+ }
+@@ -1055,7 +1067,8 @@ std::unique_ptr<ComputePipeline> PipelineCache::CreateComputePipeline(
+     };
+     const GPUVAddr program_base{kepler_compute->regs.code_loc.Address()};
+     const auto& qmd{kepler_compute->launch_description};
+-    ComputeEnvironment env{*kepler_compute, *gpu_memory, program_base, qmd.program_start};
++    ComputeEnvironment env{*kepler_compute, *gpu_memory, program_base, qmd.program_start,
++                           shader->lowered_native};
+     env.SetCachedSize(shader->size_bytes);
+ 
+     main_pools.ReleaseContents();
+diff --git a/src/video_core/shader_cache.cpp b/src/video_core/shader_cache.cpp
+index dfe80ab..43572c9 100644
+--- a/src/video_core/shader_cache.cpp
++++ b/src/video_core/shader_cache.cpp
+@@ -6,6 +6,7 @@
+ 
+ #include <algorithm>
+ #include <cstring>
++#include <cstdlib>
+ #include <string>
+ #include <unordered_set>
+ #include <fmt/ranges.h>
+@@ -89,7 +90,8 @@ bool ShaderCache::RefreshStages(std::array<u64, 6>& unique_hashes) try {
+         if (!shader_info) {
+             const u32 start_address{native ? 0 : shader_config.offset};
+             try {
+-                // Native programs are lowered while the environment is built.
++                // Native programs are lowered while the environment is built (once: the
++                // ShaderInfo keeps the result for the pipeline's environments).
+                 RethrowIfRejected(*cpu_shader_addr);
+                 GraphicsEnvironment env{*maxwell3d, *gpu_memory, program, native ? shader_addr : base_addr, start_address};
+                 shader_info = MakeShaderInfo(env, *cpu_shader_addr);
+@@ -202,7 +204,8 @@ void ShaderCache::GetGraphicsEnvironments(GraphicsEnvironments& result,
+         const GPUVAddr address = native
+             ? (static_cast<u64>(config.reserved[0] & 0xff) << 32) | config.reserved[1]
+             : base_addr;
+-        env = GraphicsEnvironment{*maxwell3d, *gpu_memory, program, address, start_address};
++        env = GraphicsEnvironment{*maxwell3d, *gpu_memory, program, address, start_address,
++                                  shader_infos[index]->lowered_native};
+         env.SetCachedSize(shader_infos[index]->size_bytes);
+         result.env_ptrs[env_index++] = &env;
+     }
+@@ -342,6 +345,22 @@ const ShaderInfo* ShaderCache::MakeShaderInfo(GenericEnvironment& env, VAddr cpu
+         info->unique_hash = env.CalculateHash();
+         info->size_bytes = env.ReadSizeBytes();
+     }
++    static const bool reuse_lowered = [] {
++        const char* value = std::getenv("EDEN_NX2_REUSE_LOWERED");
++        return value == nullptr || value[0] != '0';
++    }();
++    if (reuse_lowered) {
++        info->lowered_native = env.LoweredNative();
++        static const bool trace_lowered =
++            std::getenv("EDEN_NX2_LOWERING_STATS") != nullptr;
++        if (trace_lowered && info->lowered_native) {
++            LOG_INFO(HW_GPU, "NX2 lowered-cache retained: hash {:#x}, address {:#x}, "
++                             "code {} bytes, capacity {} bytes",
++                     info->unique_hash, cpu_addr,
++                     info->lowered_native->code.size() * sizeof(u64),
++                     info->lowered_native->code.capacity() * sizeof(u64));
++        }
++    }
+     const size_t size_bytes{env.SourceSizeBytes() ? env.SourceSizeBytes() : info->size_bytes};
+     const ShaderInfo* const result{info.get()};
+     Register(std::move(info), cpu_addr, size_bytes);
+diff --git a/src/video_core/shader_cache.h b/src/video_core/shader_cache.h
+index f4179dd..3107b7f 100644
+--- a/src/video_core/shader_cache.h
++++ b/src/video_core/shader_cache.h
+@@ -38,6 +38,8 @@ class GenericEnvironment;
+ struct ShaderInfo {
+     u64 unique_hash{};
+     size_t size_bytes{};
++    /// Lowered code of a native program, reused when its pipelines are built.
++    std::shared_ptr<const LoweredNativeCode> lowered_native;
+ };
+ 
+ class ShaderCache : public VideoCommon::ChannelSetupCaches<VideoCommon::ChannelInfo> {
+diff --git a/src/video_core/shader_environment.cpp b/src/video_core/shader_environment.cpp
+index 9d189ad..4f70b59 100644
+--- a/src/video_core/shader_environment.cpp
++++ b/src/video_core/shader_environment.cpp
+@@ -322,7 +322,23 @@ Tegra::Texture::TICEntry GenericEnvironment::ReadTextureInfo(GPUVAddr tic_addr,
+     return entry;
+ }
+ 
+-void GenericEnvironment::InitializeNativeCode(u32 source_header_size) {
++void GenericEnvironment::InitializeNativeCode(std::shared_ptr<const LoweredNativeCode> lowered,
++                                              u32 source_header_size) {
++    if (!lowered) {
++        lowered = LowerNativeCode(source_header_size);
++    }
++    if (lowered->texture_bound != ~0U) {
++        // Native TEX carries its cbuf index explicitly; TEXS obtains it from the environment.
++        texture_bound = lowered->texture_bound;
++    }
++    native_source_size = lowered->source_size;
++    code = lowered->code;
++    cached_lowest = 0;
++    cached_highest = static_cast<u32>((code.size() - 1) * sizeof(u64));
++    lowered_native = std::move(lowered);
++}
++
++std::shared_ptr<const LoweredNativeCode> GenericEnvironment::LowerNativeCode(u32 source_header_size) {
+     using Shader::Ampere::Instruction;
+     const u32 native_header_size = source_header_size;
+     constexpr u32 maximum_instructions = Shader::Ampere::ProgramCaptureState::MaximumInstructions;
+@@ -439,33 +455,32 @@ void GenericEnvironment::InitializeNativeCode(u32 source_header_size) {
+             program_base, lowered.error_offset, lowered.error, words[0] & 0xfff, words[0],
+             words[1], words[2], words[3]);
+     }
+-    if (lowered.required_texture_buffer != ~0U) {
+-        // Native TEX carries its cbuf index explicitly; TEXS obtains it from the environment.
+-        texture_bound = lowered.required_texture_buffer;
+-    }
+-    native_source_size = native_header_size + lowered.source_size;
+-    code.resize(sizeof(sph) / sizeof(u64));
+-    std::memcpy(code.data(), &sph, sizeof(sph));
++    auto result = std::make_shared<LoweredNativeCode>();
++    result->texture_bound = lowered.required_texture_buffer;
++    result->source_size = native_header_size + lowered.source_size;
++    auto& lowered_code = result->code;
++    lowered_code.resize(sizeof(sph) / sizeof(u64));
++    std::memcpy(lowered_code.data(), &sph, sizeof(sph));
+     for (const u64 instruction : lowered.instructions) {
+-        if ((code.size() * sizeof(u64)) % 32 == 0) {
+-            code.push_back(0); // Maxwell scheduling word, absent from native instructions.
++        if ((lowered_code.size() * sizeof(u64)) % 32 == 0) {
++            lowered_code.push_back(0); // Maxwell scheduling word, absent from native instructions.
+         }
+-        code.push_back(instruction);
++        lowered_code.push_back(instruction);
+     }
+     // Keep the original padding ABI, then retain the native address map as
+     // unreachable data. Existing disk-cache serialization carries it with code.
+-    code.push_back(0);
+-    Shader::Ampere::AppendNativeAddressMap(code, lowered.source_instruction_offsets);
+-    cached_lowest = 0;
+-    cached_highest = static_cast<u32>((code.size() - 1) * sizeof(u64));
++    lowered_code.push_back(0);
++    Shader::Ampere::AppendNativeAddressMap(lowered_code, lowered.source_instruction_offsets);
+     LOG_DEBUG(Shader, "Lowered native shader at {:#x}: {} source bytes, {} instructions",
+-             program_base, native_source_size, lowered.instructions.size());
++              program_base, result->source_size, lowered.instructions.size());
++    return result;
+ }
+ 
+ GraphicsEnvironment::GraphicsEnvironment(Tegra::Engines::Maxwell3D& maxwell3d_,
+                                          Tegra::MemoryManager& gpu_memory_,
+                                          Maxwell::ShaderType program, GPUVAddr program_base_,
+-                                         u32 start_address_)
++                                         u32 start_address_,
++                                         std::shared_ptr<const LoweredNativeCode> lowered_native_)
+     : GenericEnvironment{gpu_memory_, program_base_, start_address_}, maxwell3d{&maxwell3d_} {
+     gpu_memory->ReadBlock(program_base + start_address, &sph, sizeof(sph));
+     initial_offset = sizeof(sph);
+@@ -484,7 +499,7 @@ GraphicsEnvironment::GraphicsEnvironment(Tegra::Engines::Maxwell3D& maxwell3d_,
+                 dump.write(reinterpret_cast<const char*>(bytes.data()), bytes.size());
+             }
+         }
+-        InitializeNativeCode();
++        InitializeNativeCode(std::move(lowered_native_));
+     }
+     gp_passthrough_mask = maxwell3d->regs.post_vtg_shader_attrib_skip_mask;
+     switch (program) {
+@@ -594,7 +609,8 @@ u32 GraphicsEnvironment::ReadViewportTransformState() {
+ 
+ ComputeEnvironment::ComputeEnvironment(Tegra::Engines::KeplerCompute& kepler_compute_,
+                                        Tegra::MemoryManager& gpu_memory_, GPUVAddr program_base_,
+-                                       u32 start_address_)
++                                       u32 start_address_,
++                                       std::shared_ptr<const LoweredNativeCode> lowered_native_)
+     : GenericEnvironment{gpu_memory_, program_base_, start_address_}, kepler_compute{
+                                                                           &kepler_compute_} {
+     const auto& qmd{kepler_compute->launch_description};
+@@ -607,7 +623,7 @@ ComputeEnvironment::ComputeEnvironment(Tegra::Engines::KeplerCompute& kepler_com
+     if (kepler_compute->IsNativeMode()) {
+         initial_offset = sizeof(sph);
+         is_proprietary_driver = true;
+-        InitializeNativeCode(0);
++        InitializeNativeCode(std::move(lowered_native_), 0);
+         start_address = sizeof(sph);
+     }
+ }
+diff --git a/src/video_core/shader_environment.h b/src/video_core/shader_environment.h
+index e49f01d..30d5995 100644
+--- a/src/video_core/shader_environment.h
++++ b/src/video_core/shader_environment.h
+@@ -29,6 +29,19 @@ class Memorymanager;
+ 
+ namespace VideoCommon {
+ 
++/// A native (Switch 2) program after capture and lowering to Maxwell code. The shader cache keeps
++/// it so the environments built for the program's pipelines don't capture and lower it again.
++struct LoweredNativeCode {
++    /// Shader header, lowered instructions with Maxwell scheduling words, then the native
++    /// address map (what the environment's `code` used to be filled with).
++    std::vector<u64> code;
++    /// Bytes of the native program that were read, header included.
++    size_t source_size{};
++    /// Constant buffer holding the texture handles if the program requires one, otherwise ~0U
++    /// (the engine's register value is used).
++    u32 texture_bound = ~0U;
++};
++
+ class GenericEnvironment : public Shader::Environment {
+ public:
+     explicit GenericEnvironment() = default;
+@@ -63,6 +76,10 @@ public:
+         return native_source_size;
+     }
+ 
++    [[nodiscard]] const std::shared_ptr<const LoweredNativeCode>& LoweredNative() const noexcept {
++        return lowered_native;
++    }
++
+     [[nodiscard]] bool CanBeSerialized() const noexcept;
+ 
+     [[nodiscard]] u64 CalculateHash() const;
+@@ -78,8 +95,12 @@ public:
+ protected:
+     std::optional<u64> TryFindSize();
+ 
+-    void InitializeNativeCode(u32 source_header_size = 128);
++    /// Adopts an already lowered native program, or captures and lowers it when there is none.
++    void InitializeNativeCode(std::shared_ptr<const LoweredNativeCode> lowered,
++                              u32 source_header_size = 128);
++    std::shared_ptr<const LoweredNativeCode> LowerNativeCode(u32 source_header_size);
+     size_t native_source_size{};
++    std::shared_ptr<const LoweredNativeCode> lowered_native;
+ 
+     Tegra::Texture::TICEntry ReadTextureInfo(GPUVAddr tic_addr, u32 tic_limit,
+                                              bool via_header_index, u32 raw);
+@@ -117,7 +138,8 @@ public:
+     explicit GraphicsEnvironment(Tegra::Engines::Maxwell3D& maxwell3d_,
+                                  Tegra::MemoryManager& gpu_memory_,
+                                  Tegra::Engines::Maxwell3D::Regs::ShaderType program,
+-                                 GPUVAddr program_base_, u32 start_address_);
++                                 GPUVAddr program_base_, u32 start_address_,
++                                 std::shared_ptr<const LoweredNativeCode> lowered_native_ = {});
+ 
+     ~GraphicsEnvironment() override = default;
+ 
+@@ -143,7 +165,8 @@ public:
+     explicit ComputeEnvironment() = default;
+     explicit ComputeEnvironment(Tegra::Engines::KeplerCompute& kepler_compute_,
+                                 Tegra::MemoryManager& gpu_memory_, GPUVAddr program_base_,
+-                                u32 start_address_);
++                                u32 start_address_,
++                                std::shared_ptr<const LoweredNativeCode> lowered_native_ = {});
+ 
+     ~ComputeEnvironment() override = default;
+ 
+diff --git a/src/video_core/texture_cache/texture_cache.h b/src/video_core/texture_cache/texture_cache.h
+index d27aba1..32bd908 100644
+--- a/src/video_core/texture_cache/texture_cache.h
++++ b/src/video_core/texture_cache/texture_cache.h
+@@ -238,7 +238,22 @@ void TextureCache<P>::TickFrame() {
+                 const u64 budget = runtime.GetDeviceMemoryBudget();
+                 if (budget > 2_GiB) {
+                     const u64 old_critical = critical_memory;
+-                    const u64 margin = (std::min)(budget / 8, 1_GiB);
++                    static const u64 requested_margin = [] {
++                        const char* text = std::getenv("EDEN_NX2_TC_MARGIN_MIB");
++                        if (text == nullptr) {
++                            return u64{0};
++                        }
++                        char* end{};
++                        const auto value = std::strtoull(text, &end, 10);
++                        if (end == text || *end != '\0' || value < 256 || value > 2048) {
++                            LOG_WARNING(HW_GPU, "Invalid EDEN_NX2_TC_MARGIN_MIB; using the default margin");
++                            return u64{0};
++                        }
++                        return static_cast<u64>(value) << 20;
++                    }();
++                    const u64 margin = requested_margin != 0
++                                           ? (std::min)(requested_margin, budget / 3)
++                                           : (std::min)(budget / 8, 1_GiB);
+                     critical_memory = budget - margin;
+                     expected_memory = budget - 2 * margin;
+                     // Log the first values and real changes (the budget moves by a few MiB all
+diff --git a/src/yuzu/main_window.cpp b/src/yuzu/main_window.cpp
+index b0c0446..fd47662 100644
+--- a/src/yuzu/main_window.cpp
++++ b/src/yuzu/main_window.cpp
+@@ -8,6 +8,7 @@
+ #undef VMA_IMPLEMENTATION
+ #endif
+ 
++#include <cstdlib>
+ #include <boost/algorithm/string/split.hpp>
+ #include "common/fs/path_util.h"
+ #include "common/settings.h"
+@@ -4228,6 +4229,12 @@ void MainWindow::UpdateStatusBar() {
+         tas_label->clear();
+ 
+     auto results = QtCommon::system->GetAndResetPerfStats();
++    static const bool benchmark_stats = std::getenv("EDEN_NX2_BENCHMARK_STATS") != nullptr;
++    if (benchmark_stats) {
++        LOG_INFO(Frontend, "NX2 benchmark: game {:.3f} FPS; system {:.3f} FPS; frame {:.3f} ms; speed {:.3f}",
++                 results.average_game_fps, results.system_fps, results.frametime * 1000.0,
++                 results.emulation_speed);
++    }
+     auto& shader_notify = QtCommon::system->GPU().ShaderNotify();
+     const int shaders_building = shader_notify.ShadersBuilding();
+ 

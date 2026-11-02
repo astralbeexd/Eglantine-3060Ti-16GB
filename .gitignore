@@ -1,0 +1,13 @@
+Eglantine/
+build/
+work/
+*.exe
+*.dll
+*.zip
+*.keys
+*.nsp
+*.xci
+user/keys/
+user/nand/
+user/sdmc/
+user/cache/
