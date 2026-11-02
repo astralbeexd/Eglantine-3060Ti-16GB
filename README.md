@@ -1,5 +1,5 @@
 # Eglantine-3060Ti-16GB
-
+HECHO COMPLETAMENTE CON IA EN BASE A LA RELEASE PUBLICA DE EGLANTINE STABLE 1.0.0.
 Compilación comunitaria experimental para Windows, probada en Ryzen 7 5800X,
 RTX 3060 Ti de 8 GB y 16 GB de RAM. No es una versión oficial ni garantiza 60 FPS.
 
