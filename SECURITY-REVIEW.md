@@ -41,10 +41,16 @@ del paquete antes de clasificar bibliotecas como ausentes. No se han descartado 
 porque ClamAV no haya detectado malware. Los avisos de paquetes retirados se mantendrán
 en el registro histórico y la evaluación final indicará su aplicabilidad al paquete concreto.
 
-## Qué falta
+## Estado actual
 
-Terminar la compilación del programa, validar juntos los binarios y las bibliotecas nuevas,
-comprobar las importaciones y sus símbolos, ejecutar la prueba del juego y volver a analizar
-el ZIP final. La apertura de terminales locales está fallando con
-`CreateProcessSecurityEnvironment (0x8007000A)`; la compilación iniciada previamente continúa.
-No hay una release binaria aprobada ni una garantía de seguridad o de 60 FPS.
+Las fuentes completas de dependencias se publicaron en la prerelease sólo de fuentes
+`security-sources-98749eca2392`; la tarea verificó las 82 firmas MSYS2 con GnuPG.
+La compilación del programa terminó. El candidato de seguridad anterior pasó ClamAV:
+226 archivos, cero detecciones, salida 0. Ese resultado no cubre los ejecutables nuevos
+que corrigen la carga de RomFS hasta repetir el análisis.
+
+La corrección de carga pasó las pruebas documentadas en
+`evidence/ROMFS-LOADING-REGRESSION.json`. La carrera completa sigue pendiente.
+Se añadió una protección al banco de pruebas privado para no abrir el emulador con
+margen insuficiente de memoria comprometida. No se modificó la configuración del
+archivo de paginación ni del antivirus de Windows. No hay garantía de seguridad ni 60 FPS.

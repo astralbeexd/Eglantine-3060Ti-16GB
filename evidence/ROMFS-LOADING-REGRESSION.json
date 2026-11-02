@@ -1,0 +1,24 @@
+{
+  "scope": "Loose ExeFS and RomFS directory loading; private local game fixture, not a complete race test",
+  "metadata_ms": 11,
+  "romfs_before_ms": 62948,
+  "romfs_after_ms": 993,
+  "romfs_virtual_bytes": 23516565416,
+  "before_index_sha256": "f76f4faba3f6363945d0eb1fc2092a45320caf5a73ad3eb9df764a14c3803db1",
+  "after_index_sha256": "f76f4faba3f6363945d0eb1fc2092a45320caf5a73ad3eb9df764a14c3803db1",
+  "index_hash_scope": "RomFS header and all directory/file metadata and hash tables; does not hash entire payload",
+  "repeated_read_same_object": true,
+  "retained_metadata_bytes_after_64_small_builds": {
+    "before": 16384,
+    "after": 0
+  },
+  "source_files_verified": 27,
+  "patches_verified": 4,
+  "filesystem_filter_equivalence_cases_passed": 6,
+  "symlink_tests": "Unavailable in Windows test environment; reparse points retain std::filesystem fallback; not dynamically verified",
+  "full_race_validated": false,
+  "binary_sha256": {
+    "eglantine.exe": "66ed65418991551007e783362cf99b0bf1cd9e5b2fd0d9b51c4b764f753fe1a0",
+    "eden-cli.exe": "1ad6e1b77975f56b4b957b0650a71b178016812da31c38350d2aabe9b60c4edb"
+  }
+}

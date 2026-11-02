@@ -76,6 +76,11 @@ for compiler_info in Eglantine/build/3060ti/CMakeFiles/*/CMake{C,CXX,ASM}Compile
         "$compiler_info"
 done
 
+if ! git -C Eglantine apply --reverse --check ../3060ti-romfs-loading.patch 2>/dev/null; then
+    git -C Eglantine apply --check ../3060ti-romfs-loading.patch
+    git -C Eglantine apply ../3060ti-romfs-loading.patch
+fi
+
 cmake -S Eglantine -B Eglantine/build/3060ti -G Ninja \
     -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING=OFF -DYUZU_TESTS=OFF \
     -DENABLE_QT=ON -DYUZU_CMD=ON -DYUZU_ROOM=OFF \

@@ -3,6 +3,10 @@ on:
   push:
     branches: [main]
     paths:
+      - SOURCE-MANIFEST.json
+      - modified/**
+      - "*.patch"
+      - build-ucrt64.sh
       - dependencies/source-distribution.json
       - tools/collect_distribution_sources.py
       - .github/workflows/source-distribution.yml

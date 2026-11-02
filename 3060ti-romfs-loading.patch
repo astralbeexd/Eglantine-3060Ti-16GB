@@ -1,0 +1,240 @@
+diff --git a/src/common/fs/fs.cpp b/src/common/fs/fs.cpp
+index 90cef15..3ba1cf2 100644
+--- a/src/common/fs/fs.cpp
++++ b/src/common/fs/fs.cpp
+@@ -426,8 +426,8 @@ void IterateDirEntries(const std::filesystem::path& path, const DirEntryCallable
+     std::error_code ec;
+     bool callback_error = false;
+     for (auto const& entry : fs::directory_iterator(path, ec)) {
+-        if ((True(filter & DirEntryFilter::File) && entry.status().type() == fs::file_type::regular)
+-        || (True(filter & DirEntryFilter::Directory) && entry.status().type() == fs::file_type::directory)) {
++        if ((True(filter & DirEntryFilter::File) && entry.is_regular_file())
++        || (True(filter & DirEntryFilter::Directory) && entry.is_directory())) {
+             if (!callback(entry)) {
+                 callback_error = true;
+             }
+@@ -459,8 +459,8 @@ void IterateDirEntriesRecursively(const std::filesystem::path& path, const DirEn
+     bool callback_error = false;
+     // MSVC should now be fixed... right... right?!?!?!
+     for (const auto& entry : fs::recursive_directory_iterator(path, ec)) {
+-        if ((True(filter & DirEntryFilter::File) && entry.status().type() == fs::file_type::regular)
+-        || (True(filter & DirEntryFilter::Directory) && entry.status().type() == fs::file_type::directory)) {
++        if ((True(filter & DirEntryFilter::File) && entry.is_regular_file())
++        || (True(filter & DirEntryFilter::Directory) && entry.is_directory())) {
+             if (!callback(entry)) {
+                 callback_error = true;
+             }
+diff --git a/src/core/file_sys/fsmitm_romfsbuild.cpp b/src/core/file_sys/fsmitm_romfsbuild.cpp
+index 8807bbd..f8cb0ff 100644
+--- a/src/core/file_sys/fsmitm_romfsbuild.cpp
++++ b/src/core/file_sys/fsmitm_romfsbuild.cpp
+@@ -197,7 +197,19 @@ RomFSBuildContext::RomFSBuildContext(VirtualDir base_, VirtualDir ext_)
+     VisitDirectory(base, ext, root);
+ }
+ 
+-RomFSBuildContext::~RomFSBuildContext() = default;
++RomFSBuildContext::~RomFSBuildContext() {
++    // Break ownership cycles while the vectors still keep every node alive.
++    for (const auto& file : files) {
++        file->parent.reset();
++        file->sibling.reset();
++    }
++    for (const auto& directory : directories) {
++        directory->parent.reset();
++        directory->child.reset();
++        directory->sibling.reset();
++        directory->file.reset();
++    }
++}
+ 
+ std::vector<std::pair<u64, VirtualFile>> RomFSBuildContext::Build() {
+     const u64 dir_hash_table_entry_count = romfs_get_hash_table_count(num_dirs);
+diff --git a/src/core/file_sys/vfs/vfs_real.cpp b/src/core/file_sys/vfs/vfs_real.cpp
+index 5b5b540..fe9bad8 100644
+--- a/src/core/file_sys/vfs/vfs_real.cpp
++++ b/src/core/file_sys/vfs/vfs_real.cpp
+@@ -13,6 +13,7 @@
+ #include "common/fs/fs.h"
+ #include "common/fs/path_util.h"
+ #include "common/logging.h"
++#include "common/scope_exit.h"
+ #include "core/file_sys/vfs/vfs.h"
+ #include "core/file_sys/vfs/vfs_real.h"
+ 
+@@ -21,6 +22,12 @@
+ 
+ #ifdef _WIN32
+ #include <cstdio> // _getmaxstdio
++#include <windows.h>
++#undef CopyFile
++#undef CreateDirectory
++#undef CreateFile
++#undef DeleteFile
++#undef MoveFile
+ #else
+ #include <sys/resource.h> // getrlimit
+ #endif
+@@ -39,6 +46,57 @@ namespace FS = Common::FS;
+ 
+ namespace {
+ 
++#ifdef _WIN32
++template <typename Callback>
++void IterateWindowsEntries(std::string_view path, bool directories, Callback&& callback) {
++    const auto root = std::filesystem::path{FS::ToU8String(path)};
++    const auto pattern = root / L"*";
++    WIN32_FIND_DATAW data{};
++    HANDLE search = FindFirstFileExW(pattern.c_str(), FindExInfoBasic, &data,
++                                     FindExSearchNameMatch, nullptr, FIND_FIRST_EX_LARGE_FETCH);
++    if (search == INVALID_HANDLE_VALUE && GetLastError() == ERROR_INVALID_PARAMETER) {
++        search = FindFirstFileExW(pattern.c_str(), FindExInfoBasic, &data,
++                                  FindExSearchNameMatch, nullptr, 0);
++    }
++    if (search == INVALID_HANDLE_VALUE) {
++        const auto error = GetLastError();
++        if (error != ERROR_FILE_NOT_FOUND) {
++            LOG_ERROR(Common_Filesystem, "Failed to enumerate directory {}, error={}", path, error);
++        }
++        return;
++    }
++    SCOPE_EXIT { FindClose(search); };
++
++    do {
++        const std::wstring_view name{data.cFileName};
++        if (name == L"." || name == L"..") {
++            continue;
++        }
++        const auto full_path = root / name;
++        u64 size = (static_cast<u64>(data.nFileSizeHigh) << 32) | data.nFileSizeLow;
++        bool matches = ((data.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) != 0) == directories;
++        // Preserve std::filesystem's target-following behavior for links and junctions.
++        if (data.dwFileAttributes & FILE_ATTRIBUTE_REPARSE_POINT) {
++            const std::filesystem::directory_entry entry{full_path};
++            matches = directories ? entry.is_directory() : entry.is_regular_file();
++            if (matches && !directories) {
++                size = entry.file_size();
++            }
++        } else if (data.dwFileAttributes & FILE_ATTRIBUTE_DEVICE) {
++            matches = false;
++        }
++        if (matches) {
++            callback(FS::PathToUTF8String(full_path), size);
++        }
++    } while (FindNextFileW(search, &data));
++
++    const auto error = GetLastError();
++    if (error != ERROR_NO_MORE_FILES) {
++        LOG_ERROR(Common_Filesystem, "Directory enumeration failed for {}, error={}", path, error);
++    }
++}
++#endif
++
+ // Files the cache keeps open. It has to stay below the process's open-file limit (the C runtime's
+ // on Windows, RLIMIT_NOFILE elsewhere) with room to spare: at the limit every other open fails
+ // (saves, shader caches, and the cache's own next file, which it only evicts for once it reaches
+@@ -386,6 +444,12 @@ std::vector<VirtualFile> RealVfsDirectory::IterateEntries<RealVfsFile, VfsFile>(
+ 
+     std::vector<VirtualFile> out;
+ 
++#ifdef _WIN32
++    IterateWindowsEntries(path, false, [this, &out](const std::string& full_path, u64 size) {
++        out.emplace_back(base.OpenFileFromEntry(full_path, size, path, perms));
++    });
++#else
++
+     const FS::DirEntryCallable callback = [this,
+                                            &out](const std::filesystem::directory_entry& entry) {
+         const auto full_path_string = FS::PathToUTF8String(entry.path());
+@@ -396,6 +460,7 @@ std::vector<VirtualFile> RealVfsDirectory::IterateEntries<RealVfsFile, VfsFile>(
+     };
+ 
+     FS::IterateDirEntries(path, callback, FS::DirEntryFilter::File);
++#endif
+ 
+     return out;
+ }
+@@ -408,6 +473,12 @@ std::vector<VirtualDir> RealVfsDirectory::IterateEntries<RealVfsDirectory, VfsDi
+ 
+     std::vector<VirtualDir> out;
+ 
++#ifdef _WIN32
++    IterateWindowsEntries(path, true, [this, &out](const std::string& full_path, u64) {
++        out.emplace_back(base.OpenDirectory(full_path, perms));
++    });
++#else
++
+     const FS::DirEntryCallable callback = [this,
+                                            &out](const std::filesystem::directory_entry& entry) {
+         const auto full_path_string = FS::PathToUTF8String(entry.path());
+@@ -418,6 +489,7 @@ std::vector<VirtualDir> RealVfsDirectory::IterateEntries<RealVfsDirectory, VfsDi
+     };
+ 
+     FS::IterateDirEntries(path, callback, FS::DirEntryFilter::Directory);
++#endif
+ 
+     return out;
+ }
+diff --git a/src/core/loader/deconstructed_rom_directory.cpp b/src/core/loader/deconstructed_rom_directory.cpp
+index cda1645..1159eb4 100644
+--- a/src/core/loader/deconstructed_rom_directory.cpp
++++ b/src/core/loader/deconstructed_rom_directory.cpp
+@@ -233,7 +233,7 @@ AppLoader_DeconstructedRomDirectory::AppLoader_DeconstructedRomDirectory(FileSys
+         name = control->GetApplicationName();
+     }
+ 
+-    romfs = FindLooseRomFS(file_dir);
++    romfs_search_dir = file_dir;
+     if (const auto title_dir = file_dir->GetParentDirectory()) {
+         romfs_version = RomFSProductVersion(title_dir->GetSubdirectory("romfs"));
+     }
+@@ -245,7 +245,15 @@ AppLoader_DeconstructedRomDirectory::AppLoader_DeconstructedRomDirectory(
+     , dir(std::move(directory))
+     , override_update(override_update_)
+ {
+-    romfs = FindLooseRomFS(dir);
++    romfs_search_dir = dir;
++}
++
++void AppLoader_DeconstructedRomDirectory::ResolveRomFS() {
++    if (!romfs_initialized) {
++        romfs = FindLooseRomFS(romfs_search_dir);
++        romfs_initialized = true;
++        romfs_search_dir.reset();
++    }
+ }
+ 
+ FileType AppLoader_DeconstructedRomDirectory::IdentifyType(const FileSys::VirtualFile& dir_file) {
+@@ -302,6 +310,8 @@ AppLoader_DeconstructedRomDirectory::LoadResult AppLoader_DeconstructedRomDirect
+     }
+     metadata.Print();
+ 
++    ResolveRomFS();
++
+     // Loose-ExeFS loads bypass the NCA/NSP loaders, which are the ones that normally apply
+     // LayeredFS to the RomFS; apply it here so mods in user/load/<titleid>/ work too.
+     if (romfs != nullptr) {
+@@ -414,6 +424,7 @@ AppLoader_DeconstructedRomDirectory::LoadResult AppLoader_DeconstructedRomDirect
+ }
+ 
+ ResultStatus AppLoader_DeconstructedRomDirectory::ReadRomFS(FileSys::VirtualFile& out_dir) {
++    ResolveRomFS();
+     if (romfs == nullptr) {
+         return ResultStatus::ErrorNoRomFS;
+     }
+diff --git a/src/core/loader/deconstructed_rom_directory.h b/src/core/loader/deconstructed_rom_directory.h
+index b976b71..f5fcc05 100644
+--- a/src/core/loader/deconstructed_rom_directory.h
++++ b/src/core/loader/deconstructed_rom_directory.h
+@@ -58,8 +58,12 @@ public:
+     ResultStatus ReadNSOModules(Modules& out_modules) override;
+ 
+ private:
++    void ResolveRomFS();
++
+     FileSys::ProgramMetadata metadata;
+     FileSys::VirtualFile romfs;
++    FileSys::VirtualDir romfs_search_dir;
++    bool romfs_initialized{};
+     FileSys::VirtualDir dir;
+ 
+     std::vector<u8> icon_data;

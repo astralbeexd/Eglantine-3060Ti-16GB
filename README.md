@@ -5,7 +5,7 @@ RTX 3060 Ti de 8 GB y 16 GB de RAM. No es una versión oficial ni garantiza 60 F
 
 ## Estado de las descargas
 
-Este repositorio contiene los parches, los 22 archivos de código y configuración modificados,
+Este repositorio contiene los parches, los 27 archivos de código y configuración modificados,
 el perfil portátil y las instrucciones para reconstruir el programa desde una base exacta.
 **Todavía no hay un binario público verificado en Releases.** No descargues supuestas
 versiones de este proyecto desde enlaces ajenos. El paquete local está preparado como
@@ -58,7 +58,7 @@ No se incluyen juegos, claves, firmware, NAND, partidas, perfiles personales ni 
 La base es [Djihads80/Eglantine](https://github.com/Djihads80/Eglantine),
 commit `6bde8c20d1f7c020a920e59a989c03822a08445d`.
 Este repositorio es una distribución de cambios sobre esa base, no un historial completo del fork.
-Los tres parches reproducen los 22 archivos de `modified/`.
+Los cuatro parches reproducen los 27 archivos de `modified/`.
 
 En MSYS2 UCRT64, desde la raíz del repositorio:
 
@@ -89,3 +89,16 @@ no se deben extrapolar esas cifras a este perfil. Auto también activa algunas o
 relajadas de Dynarmic; estos nombres describen precisión de emulación, no protección de Windows.
 
 La revisión actual y sus pendientes están en [SECURITY-REVIEW.md](SECURITY-REVIEW.md). La nueva compilación y su runtime todavía requieren validación conjunta.
+
+## Corrección de carga de RomFS extraído
+
+El índice completo de una carpeta RomFS ya no se construye al consultar los metadatos
+del juego. Se construye al necesitarlo y se reutiliza dentro del mismo cargador.
+En Windows se obtiene el tipo y tamaño de los archivos durante la enumeración nativa;
+los puntos de reanálisis conservan la ruta de std::filesystem.
+También se rompen los ciclos de referencias de los nodos temporales al destruir el constructor.
+
+Prueba local: metadatos 11 ms, construcción del índice 62.948 ms antes y 993 ms después.
+La cabecera y las cuatro tablas del índice conservaron el mismo SHA-256. La prueba de
+64 índices pequeños pasó de 16.384 bytes retenidos a cero. No es una prueba de 60 FPS
+ni de una carrera completa. Véase `evidence/ROMFS-LOADING-REGRESSION.json`.

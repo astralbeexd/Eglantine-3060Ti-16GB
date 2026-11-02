@@ -8,11 +8,14 @@
   ],
   "renderer_thinlto": true,
   "pgo": false,
-  "binaries": null,
+  "binaries": {
+    "eglantine.exe": "66ed65418991551007e783362cf99b0bf1cd9e5b2fd0d9b51c4b764f753fe1a0",
+    "eden-cli.exe": "1ad6e1b77975f56b4b957b0650a71b178016812da31c38350d2aabe9b60c4edb"
+  },
   "previously_tested_binary_hashes": {
     "eglantine.exe": "04b788c820d68a89afddb72cf28b5ed4816ee30c1d3cb7d32f33dfccabd637a8",
     "eden-cli.exe": "4bb922862591a23ffd2109cfd0356484bf78806453e9b57e0d960a29887a688a"
   },
-  "current_source_status": "security rebuild in progress; new binary hashes pending",
+  "current_source_status": "compiled; RomFS regression tests passed; complete gameplay validation pending",
   "http_library": "cpp-httplib v0.51.0"
 }

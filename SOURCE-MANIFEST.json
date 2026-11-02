@@ -3,20 +3,26 @@
   "patches": [
     "3060ti-memory-experimental.patch",
     "3060ti-mejoras-v2-incremental.patch",
-    "3060ti-security-surface.patch"
+    "3060ti-security-surface.patch",
+    "3060ti-romfs-loading.patch"
   ],
   "new_paths": [
     "src/video_core/vulkan_common/heap_accounting.h"
   ],
   "modified_paths": [
     "cpmfile.json",
+    "src/common/fs/fs.cpp",
     "src/common/host_memory.cpp",
     "src/common/host_memory.h",
     "src/common/thread.cpp",
+    "src/core/file_sys/fsmitm_romfsbuild.cpp",
+    "src/core/file_sys/vfs/vfs_real.cpp",
     "src/core/hle/service/am/service/self_controller.cpp",
     "src/core/hle/service/am/service/self_controller.h",
     "src/core/hle/service/nx2_gsv.h",
     "src/core/hle/service/service.cpp",
+    "src/core/loader/deconstructed_rom_directory.cpp",
+    "src/core/loader/deconstructed_rom_directory.h",
     "src/input_common/drivers/tas_input.cpp",
     "src/input_common/drivers/tas_input.h",
     "src/video_core/CMakeLists.txt",
@@ -55,10 +61,16 @@
     "modified/src/yuzu/main_window.cpp": "af5e3261b4d0121a5fee11d2f527228c0813dd18210c02a3571e13b39aed0bd0",
     "3060ti-memory-experimental.patch": "59bc349995a73025fbfb00abbc40b4a9cf05d97d1c1c47e022a2af764c6ab756",
     "3060ti-mejoras-v2-incremental.patch": "d0b8905992e0e833c6cbe515fb21961819d52d92a2ccb24bd46315584c69c1ed",
-    "build-ucrt64.sh": "cdec5fb63dd669911a967568bf2022475b06733db2cd153a980358c71290d812",
+    "build-ucrt64.sh": "622eefae97c022c6ddf955c8b21ff346069a96970b7374a8916a8f1d107df878",
     "profile/qt-config.ini": "06612a55af28b489b733f31f3422dc72fc6d2e642a8f5d1ac020fd900d1762f8",
     "modified/cpmfile.json": "7e01c74fa5299cf0c2443dcee0a36673989284c338bd3c80c4695c5caf0dbadc",
     "modified/src/yuzu/updater/update_dialog.cpp": "c622902d7de2eb1e6c28ffded3a3d12ad22e18e2b446c15066aa455e19599ccb",
-    "3060ti-security-surface.patch": "a03d1c38aba6b159c12e3f8f430f836d2aaf04fd2b15b91b194f8023a76c1ada"
+    "3060ti-security-surface.patch": "a03d1c38aba6b159c12e3f8f430f836d2aaf04fd2b15b91b194f8023a76c1ada",
+    "modified/src/common/fs/fs.cpp": "4364a5e60ed1dca9d2123eca3b1fb08e60fff84a2e3b2212717cd3e7f38be56c",
+    "modified/src/core/file_sys/fsmitm_romfsbuild.cpp": "42a148d724f408998f7b74f56e9ff91a629dd3bf97d0842b79a57143b31bb0cd",
+    "modified/src/core/file_sys/vfs/vfs_real.cpp": "0ae831b4fb934b9a7092dd17d5a2e42d5f579bd99dbacc39bb9bdbf6bf18d18b",
+    "modified/src/core/loader/deconstructed_rom_directory.cpp": "3bf05fee7e30ab0bd80a4390207d66dae745ee4c6db383b18f975d81ebb7c0b5",
+    "modified/src/core/loader/deconstructed_rom_directory.h": "e5749843d0d57da7dcd79ab440103fe259d4baea7e337baa993275ee3baa3154",
+    "3060ti-romfs-loading.patch": "7836416913cd99637ec32db25a4c6f96551e9a998f48f2cb1da276e3d8ead1ba"
   }
 }
