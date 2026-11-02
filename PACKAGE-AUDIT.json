@@ -1,0 +1,23 @@
+{
+  "runtime_dlls": 115,
+  "packages": 74,
+  "pe_files": 117,
+  "all_aslr": true,
+  "all_dep": true,
+  "unresolved_static_imports": 0,
+  "matches_installed_runtime_files": true,
+  "official_package_signatures_independently_reverified": false,
+  "clean_portable_profile": true,
+  "private_data_in_public_package": false,
+  "smoke_test_seconds": 30,
+  "smoke_test_alive": true,
+  "loaded_msys2_modules": false,
+  "authenticode": "NotSigned",
+  "antivirus": {
+    "status": "scan_failed",
+    "error": "0x80508023"
+  },
+  "gameplay_test": "short_6000_presents_race_visual_test_passed",
+  "independently_audited": false,
+  "corresponding_sources_complete": false
+}

@@ -1,0 +1,1516 @@
+{
+  "bomFormat": "CycloneDX",
+  "specVersion": "1.6",
+  "serialNumber": "urn:uuid:854885ae-dcee-441f-86ca-c8c1365547ed",
+  "version": 1,
+  "metadata": {
+    "timestamp": "2026-11-02T02:45:17.279453+00:00",
+    "component": {
+      "type": "application",
+      "name": "Eglantine-3060Ti-16GB",
+      "version": "6bde8c20-local-v9"
+    },
+    "properties": [
+      {
+        "name": "coverage",
+        "value": "runtime DLL packages only; static components not fully inventoried"
+      },
+      {
+        "name": "vulnerability-scan",
+        "value": "not completed"
+      }
+    ]
+  },
+  "components": [
+    {
+      "type": "library",
+      "name": "mingw-w64-ucrt-x86_64-aom",
+      "version": "3.15.3-1",
+      "bom-ref": "msys2:mingw-w64-ucrt-x86_64-aom@3.15.3-1",
+      "purl": "pkg:generic/msys2/mingw-w64-ucrt-x86_64-aom@3.15.3-1",
+      "licenses": [
+        {
+          "license": {
+            "name": "spdx:BSD-2-Clause"
+          }
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://packages.msys2.org/package/mingw-w64-ucrt-x86_64-aom"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "mingw-w64-ucrt-x86_64-brotli",
+      "version": "1.2.1-1",
+      "bom-ref": "msys2:mingw-w64-ucrt-x86_64-brotli@1.2.1-1",
+      "purl": "pkg:generic/msys2/mingw-w64-ucrt-x86_64-brotli@1.2.1-1",
+      "licenses": [
+        {
+          "license": {
+            "name": "spdx:MIT"
+          }
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://packages.msys2.org/package/mingw-w64-ucrt-x86_64-brotli"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "mingw-w64-ucrt-x86_64-bzip2",
+      "version": "1.0.8-4",
+      "bom-ref": "msys2:mingw-w64-ucrt-x86_64-bzip2@1.0.8-4",
+      "purl": "pkg:generic/msys2/mingw-w64-ucrt-x86_64-bzip2@1.0.8-4",
+      "licenses": [
+        {
+          "license": {
+            "name": "custom"
+          }
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://packages.msys2.org/package/mingw-w64-ucrt-x86_64-bzip2"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "mingw-w64-ucrt-x86_64-cairo",
+      "version": "1.18.6-2",
+      "bom-ref": "msys2:mingw-w64-ucrt-x86_64-cairo@1.18.6-2",
+      "purl": "pkg:generic/msys2/mingw-w64-ucrt-x86_64-cairo@1.18.6-2",
+      "licenses": [
+        {
+          "license": {
+            "name": "spdx:LGPL-2.1-or-later OR MPL-1.1"
+          }
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://packages.msys2.org/package/mingw-w64-ucrt-x86_64-cairo"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "mingw-w64-ucrt-x86_64-dav1d",
+      "version": "1.5.4-1",
+      "bom-ref": "msys2:mingw-w64-ucrt-x86_64-dav1d@1.5.4-1",
+      "purl": "pkg:generic/msys2/mingw-w64-ucrt-x86_64-dav1d@1.5.4-1",
+      "licenses": [
+        {
+          "license": {
+            "name": "spdx:BSD-2-Clause"
+          }
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://packages.msys2.org/package/mingw-w64-ucrt-x86_64-dav1d"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "mingw-w64-ucrt-x86_64-double-conversion",
+      "version": "3.4.0-1",
+      "bom-ref": "msys2:mingw-w64-ucrt-x86_64-double-conversion@3.4.0-1",
+      "purl": "pkg:generic/msys2/mingw-w64-ucrt-x86_64-double-conversion@3.4.0-1",
+      "licenses": [
+        {
+          "license": {
+            "name": "spdx:BSD-3-Clause"
+          }
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://packages.msys2.org/package/mingw-w64-ucrt-x86_64-double-conversion"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "mingw-w64-ucrt-x86_64-enet",
+      "version": "1.3.18-1",
+      "bom-ref": "msys2:mingw-w64-ucrt-x86_64-enet@1.3.18-1",
+      "purl": "pkg:generic/msys2/mingw-w64-ucrt-x86_64-enet@1.3.18-1",
+      "licenses": [
+        {
+          "license": {
+            "name": "custom"
+          }
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://packages.msys2.org/package/mingw-w64-ucrt-x86_64-enet"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "mingw-w64-ucrt-x86_64-expat",
+      "version": "2.9.0-1",
+      "bom-ref": "msys2:mingw-w64-ucrt-x86_64-expat@2.9.0-1",
+      "purl": "pkg:generic/msys2/mingw-w64-ucrt-x86_64-expat@2.9.0-1",
+      "licenses": [
+        {
+          "license": {
+            "name": "spdx:MIT"
+          }
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://packages.msys2.org/package/mingw-w64-ucrt-x86_64-expat"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "mingw-w64-ucrt-x86_64-ffmpeg",
+      "version": "9.0.2-2",
+      "bom-ref": "msys2:mingw-w64-ucrt-x86_64-ffmpeg@9.0.2-2",
+      "purl": "pkg:generic/msys2/mingw-w64-ucrt-x86_64-ffmpeg@9.0.2-2",
+      "licenses": [
+        {
+          "license": {
+            "name": "spdx:GPL-3.0-or-later"
+          }
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://packages.msys2.org/package/mingw-w64-ucrt-x86_64-ffmpeg"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "mingw-w64-ucrt-x86_64-fontconfig",
+      "version": "2.18.3-1",
+      "bom-ref": "msys2:mingw-w64-ucrt-x86_64-fontconfig@2.18.3-1",
+      "purl": "pkg:generic/msys2/mingw-w64-ucrt-x86_64-fontconfig@2.18.3-1",
+      "licenses": [
+        {
+          "license": {
+            "name": "custom"
+          }
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://packages.msys2.org/package/mingw-w64-ucrt-x86_64-fontconfig"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "mingw-w64-ucrt-x86_64-freetype",
+      "version": "2.15.0-1",
+      "bom-ref": "msys2:mingw-w64-ucrt-x86_64-freetype@2.15.0-1",
+      "purl": "pkg:generic/msys2/mingw-w64-ucrt-x86_64-freetype@2.15.0-1",
+      "licenses": [
+        {
+          "license": {
+            "name": "spdx:GPL-2.0-or-later OR FTL"
+          }
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://packages.msys2.org/package/mingw-w64-ucrt-x86_64-freetype"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "mingw-w64-ucrt-x86_64-fribidi",
+      "version": "1.0.18-1",
+      "bom-ref": "msys2:mingw-w64-ucrt-x86_64-fribidi@1.0.18-1",
+      "purl": "pkg:generic/msys2/mingw-w64-ucrt-x86_64-fribidi@1.0.18-1",
+      "licenses": [
+        {
+          "license": {
+            "name": "spdx:LGPL-2.1-or-later"
+          }
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://packages.msys2.org/package/mingw-w64-ucrt-x86_64-fribidi"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "mingw-w64-ucrt-x86_64-gdk-pixbuf2",
+      "version": "2.44.8-1",
+      "bom-ref": "msys2:mingw-w64-ucrt-x86_64-gdk-pixbuf2@2.44.8-1",
+      "purl": "pkg:generic/msys2/mingw-w64-ucrt-x86_64-gdk-pixbuf2@2.44.8-1",
+      "licenses": [
+        {
+          "license": {
+            "name": "spdx:LGPL-2.1-or-later"
+          }
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://packages.msys2.org/package/mingw-w64-ucrt-x86_64-gdk-pixbuf2"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "mingw-w64-ucrt-x86_64-gettext-runtime",
+      "version": "1.0-1",
+      "bom-ref": "msys2:mingw-w64-ucrt-x86_64-gettext-runtime@1.0-1",
+      "purl": "pkg:generic/msys2/mingw-w64-ucrt-x86_64-gettext-runtime@1.0-1",
+      "licenses": [
+        {
+          "license": {
+            "name": "spdx:GPL-3.0-or-later AND LGPL-2.1-or-later"
+          }
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://packages.msys2.org/package/mingw-w64-ucrt-x86_64-gettext-runtime"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "mingw-w64-ucrt-x86_64-glib2",
+      "version": "2.90.1-1",
+      "bom-ref": "msys2:mingw-w64-ucrt-x86_64-glib2@2.90.1-1",
+      "purl": "pkg:generic/msys2/mingw-w64-ucrt-x86_64-glib2@2.90.1-1",
+      "licenses": [
+        {
+          "license": {
+            "name": "spdx:LGPL-2.1-or-later"
+          }
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://packages.msys2.org/package/mingw-w64-ucrt-x86_64-glib2"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "mingw-w64-ucrt-x86_64-graphite2",
+      "version": "1.3.15-1",
+      "bom-ref": "msys2:mingw-w64-ucrt-x86_64-graphite2@1.3.15-1",
+      "purl": "pkg:generic/msys2/mingw-w64-ucrt-x86_64-graphite2@1.3.15-1",
+      "licenses": [
+        {
+          "license": {
+            "name": "spdx:LGPL-2.1-or-later"
+          }
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://packages.msys2.org/package/mingw-w64-ucrt-x86_64-graphite2"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "mingw-w64-ucrt-x86_64-gsm",
+      "version": "1.0.24-1",
+      "bom-ref": "msys2:mingw-w64-ucrt-x86_64-gsm@1.0.24-1",
+      "purl": "pkg:generic/msys2/mingw-w64-ucrt-x86_64-gsm@1.0.24-1",
+      "licenses": [
+        {
+          "license": {
+            "name": "custom"
+          }
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://packages.msys2.org/package/mingw-w64-ucrt-x86_64-gsm"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "mingw-w64-ucrt-x86_64-harfbuzz",
+      "version": "15.0.0-1",
+      "bom-ref": "msys2:mingw-w64-ucrt-x86_64-harfbuzz@15.0.0-1",
+      "purl": "pkg:generic/msys2/mingw-w64-ucrt-x86_64-harfbuzz@15.0.0-1",
+      "licenses": [
+        {
+          "license": {
+            "name": "spdx:MIT"
+          }
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://packages.msys2.org/package/mingw-w64-ucrt-x86_64-harfbuzz"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "mingw-w64-ucrt-x86_64-highway",
+      "version": "1.4.0-3",
+      "bom-ref": "msys2:mingw-w64-ucrt-x86_64-highway@1.4.0-3",
+      "purl": "pkg:generic/msys2/mingw-w64-ucrt-x86_64-highway@1.4.0-3",
+      "licenses": [
+        {
+          "license": {
+            "name": "spdx:Apache-2.0"
+          }
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://packages.msys2.org/package/mingw-w64-ucrt-x86_64-highway"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "mingw-w64-ucrt-x86_64-icu",
+      "version": "78.3-4",
+      "bom-ref": "msys2:mingw-w64-ucrt-x86_64-icu@78.3-4",
+      "purl": "pkg:generic/msys2/mingw-w64-ucrt-x86_64-icu@78.3-4",
+      "licenses": [
+        {
+          "license": {
+            "name": "spdx:ICU"
+          }
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://packages.msys2.org/package/mingw-w64-ucrt-x86_64-icu"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "mingw-w64-ucrt-x86_64-jbigkit",
+      "version": "2.1-6",
+      "bom-ref": "msys2:mingw-w64-ucrt-x86_64-jbigkit@2.1-6",
+      "purl": "pkg:generic/msys2/mingw-w64-ucrt-x86_64-jbigkit@2.1-6",
+      "licenses": [
+        {
+          "license": {
+            "name": "spdx:GPL-2.0"
+          }
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://packages.msys2.org/package/mingw-w64-ucrt-x86_64-jbigkit"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "mingw-w64-ucrt-x86_64-lame",
+      "version": "4.0-1",
+      "bom-ref": "msys2:mingw-w64-ucrt-x86_64-lame@4.0-1",
+      "purl": "pkg:generic/msys2/mingw-w64-ucrt-x86_64-lame@4.0-1",
+      "licenses": [
+        {
+          "license": {
+            "name": "LGPL"
+          }
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://packages.msys2.org/package/mingw-w64-ucrt-x86_64-lame"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "mingw-w64-ucrt-x86_64-lcms2",
+      "version": "2.19.1-1",
+      "bom-ref": "msys2:mingw-w64-ucrt-x86_64-lcms2@2.19.1-1",
+      "purl": "pkg:generic/msys2/mingw-w64-ucrt-x86_64-lcms2@2.19.1-1",
+      "licenses": [
+        {
+          "license": {
+            "name": "spdx:MIT AND GPL-3.0-or-later"
+          }
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://packages.msys2.org/package/mingw-w64-ucrt-x86_64-lcms2"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "mingw-w64-ucrt-x86_64-lerc",
+      "version": "4.1.1-1",
+      "bom-ref": "msys2:mingw-w64-ucrt-x86_64-lerc@4.1.1-1",
+      "purl": "pkg:generic/msys2/mingw-w64-ucrt-x86_64-lerc@4.1.1-1",
+      "licenses": [
+        {
+          "license": {
+            "name": "spdx:Apache-2.0"
+          }
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://packages.msys2.org/package/mingw-w64-ucrt-x86_64-lerc"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "mingw-w64-ucrt-x86_64-libb2",
+      "version": "0.98.1-3",
+      "bom-ref": "msys2:mingw-w64-ucrt-x86_64-libb2@0.98.1-3",
+      "purl": "pkg:generic/msys2/mingw-w64-ucrt-x86_64-libb2@0.98.1-3",
+      "licenses": [
+        {
+          "license": {
+            "name": "custom:CC0"
+          }
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://packages.msys2.org/package/mingw-w64-ucrt-x86_64-libb2"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "mingw-w64-ucrt-x86_64-libdatrie",
+      "version": "0.2.14-1",
+      "bom-ref": "msys2:mingw-w64-ucrt-x86_64-libdatrie@0.2.14-1",
+      "purl": "pkg:generic/msys2/mingw-w64-ucrt-x86_64-libdatrie@0.2.14-1",
+      "licenses": [
+        {
+          "license": {
+            "name": "LGPL"
+          }
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://packages.msys2.org/package/mingw-w64-ucrt-x86_64-libdatrie"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "mingw-w64-ucrt-x86_64-libdeflate",
+      "version": "1.26-1",
+      "bom-ref": "msys2:mingw-w64-ucrt-x86_64-libdeflate@1.26-1",
+      "purl": "pkg:generic/msys2/mingw-w64-ucrt-x86_64-libdeflate@1.26-1",
+      "licenses": [
+        {
+          "license": {
+            "name": "spdx:MIT"
+          }
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://packages.msys2.org/package/mingw-w64-ucrt-x86_64-libdeflate"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "mingw-w64-ucrt-x86_64-libffi",
+      "version": "3.8.0-1",
+      "bom-ref": "msys2:mingw-w64-ucrt-x86_64-libffi@3.8.0-1",
+      "purl": "pkg:generic/msys2/mingw-w64-ucrt-x86_64-libffi@3.8.0-1",
+      "licenses": [
+        {
+          "license": {
+            "name": "spdx:MIT"
+          }
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://packages.msys2.org/package/mingw-w64-ucrt-x86_64-libffi"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "mingw-w64-ucrt-x86_64-libgcc",
+      "version": "16.2.0-6",
+      "bom-ref": "msys2:mingw-w64-ucrt-x86_64-libgcc@16.2.0-6",
+      "purl": "pkg:generic/msys2/mingw-w64-ucrt-x86_64-libgcc@16.2.0-6",
+      "licenses": [
+        {
+          "license": {
+            "name": "spdx:GPL-3.0-or-later WITH GCC-exception-3.1 AND GFDL-1.3-or-later"
+          }
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://packages.msys2.org/package/mingw-w64-ucrt-x86_64-libgcc"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "mingw-w64-ucrt-x86_64-libgomp",
+      "version": "16.2.0-6",
+      "bom-ref": "msys2:mingw-w64-ucrt-x86_64-libgomp@16.2.0-6",
+      "purl": "pkg:generic/msys2/mingw-w64-ucrt-x86_64-libgomp@16.2.0-6",
+      "licenses": [
+        {
+          "license": {
+            "name": "spdx:GPL-3.0-or-later WITH GCC-exception-3.1 AND GFDL-1.3-or-later"
+          }
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://packages.msys2.org/package/mingw-w64-ucrt-x86_64-libgomp"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "mingw-w64-ucrt-x86_64-libiconv",
+      "version": "1.19-1",
+      "bom-ref": "msys2:mingw-w64-ucrt-x86_64-libiconv@1.19-1",
+      "purl": "pkg:generic/msys2/mingw-w64-ucrt-x86_64-libiconv@1.19-1",
+      "licenses": [
+        {
+          "license": {
+            "name": "spdx:LGPL-2.1-or-later"
+          }
+        },
+        {
+          "license": {
+            "name": "documentation:spdx:GPL-3.0-or-later"
+          }
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://packages.msys2.org/package/mingw-w64-ucrt-x86_64-libiconv"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "mingw-w64-ucrt-x86_64-libjpeg-turbo",
+      "version": "3.2.1-1",
+      "bom-ref": "msys2:mingw-w64-ucrt-x86_64-libjpeg-turbo@3.2.1-1",
+      "purl": "pkg:generic/msys2/mingw-w64-ucrt-x86_64-libjpeg-turbo@3.2.1-1",
+      "licenses": [
+        {
+          "license": {
+            "name": "custom:BSD-like"
+          }
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://packages.msys2.org/package/mingw-w64-ucrt-x86_64-libjpeg-turbo"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "mingw-w64-ucrt-x86_64-libjxl",
+      "version": "0.12.0-2",
+      "bom-ref": "msys2:mingw-w64-ucrt-x86_64-libjxl@0.12.0-2",
+      "purl": "pkg:generic/msys2/mingw-w64-ucrt-x86_64-libjxl@0.12.0-2",
+      "licenses": [
+        {
+          "license": {
+            "name": "spdx:BSD-3-Clause"
+          }
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://packages.msys2.org/package/mingw-w64-ucrt-x86_64-libjxl"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "mingw-w64-ucrt-x86_64-liblc3",
+      "version": "1.1.3-1",
+      "bom-ref": "msys2:mingw-w64-ucrt-x86_64-liblc3@1.1.3-1",
+      "purl": "pkg:generic/msys2/mingw-w64-ucrt-x86_64-liblc3@1.1.3-1",
+      "licenses": [
+        {
+          "license": {
+            "name": "spdx:Apache-2.0"
+          }
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://packages.msys2.org/package/mingw-w64-ucrt-x86_64-liblc3"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "mingw-w64-ucrt-x86_64-libogg",
+      "version": "1.3.6-1",
+      "bom-ref": "msys2:mingw-w64-ucrt-x86_64-libogg@1.3.6-1",
+      "purl": "pkg:generic/msys2/mingw-w64-ucrt-x86_64-libogg@1.3.6-1",
+      "licenses": [
+        {
+          "license": {
+            "name": "spdx:BSD-3-Clause"
+          }
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://packages.msys2.org/package/mingw-w64-ucrt-x86_64-libogg"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "mingw-w64-ucrt-x86_64-libpng",
+      "version": "1.6.59-2",
+      "bom-ref": "msys2:mingw-w64-ucrt-x86_64-libpng@1.6.59-2",
+      "purl": "pkg:generic/msys2/mingw-w64-ucrt-x86_64-libpng@1.6.59-2",
+      "licenses": [
+        {
+          "license": {
+            "name": "custom"
+          }
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://packages.msys2.org/package/mingw-w64-ucrt-x86_64-libpng"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "mingw-w64-ucrt-x86_64-librsvg",
+      "version": "2.63.4-1",
+      "bom-ref": "msys2:mingw-w64-ucrt-x86_64-librsvg@2.63.4-1",
+      "purl": "pkg:generic/msys2/mingw-w64-ucrt-x86_64-librsvg@2.63.4-1",
+      "licenses": [
+        {
+          "license": {
+            "name": "spdx:LGPL-2.1-or-later"
+          }
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://packages.msys2.org/package/mingw-w64-ucrt-x86_64-librsvg"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "mingw-w64-ucrt-x86_64-libsoxr",
+      "version": "0.1.3-6",
+      "bom-ref": "msys2:mingw-w64-ucrt-x86_64-libsoxr@0.1.3-6",
+      "purl": "pkg:generic/msys2/mingw-w64-ucrt-x86_64-libsoxr@0.1.3-6",
+      "licenses": [
+        {
+          "license": {
+            "name": "spdx:LGPL-2.1-or-later"
+          }
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://packages.msys2.org/package/mingw-w64-ucrt-x86_64-libsoxr"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "mingw-w64-ucrt-x86_64-libstdc++",
+      "version": "16.2.0-6",
+      "bom-ref": "msys2:mingw-w64-ucrt-x86_64-libstdc++@16.2.0-6",
+      "purl": "pkg:generic/msys2/mingw-w64-ucrt-x86_64-libstdc++@16.2.0-6",
+      "licenses": [
+        {
+          "license": {
+            "name": "spdx:GPL-3.0-or-later WITH GCC-exception-3.1 AND GFDL-1.3-or-later"
+          }
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://packages.msys2.org/package/mingw-w64-ucrt-x86_64-libstdc++"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "mingw-w64-ucrt-x86_64-libthai",
+      "version": "0.1.30-1",
+      "bom-ref": "msys2:mingw-w64-ucrt-x86_64-libthai@0.1.30-1",
+      "purl": "pkg:generic/msys2/mingw-w64-ucrt-x86_64-libthai@0.1.30-1",
+      "licenses": [
+        {
+          "license": {
+            "name": "spdx:LGPL-2.1-or-later"
+          }
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://packages.msys2.org/package/mingw-w64-ucrt-x86_64-libthai"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "mingw-w64-ucrt-x86_64-libtheora",
+      "version": "1.2.0-1",
+      "bom-ref": "msys2:mingw-w64-ucrt-x86_64-libtheora@1.2.0-1",
+      "purl": "pkg:generic/msys2/mingw-w64-ucrt-x86_64-libtheora@1.2.0-1",
+      "licenses": [
+        {
+          "license": {
+            "name": "spdx:BSD-3-Clause"
+          }
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://packages.msys2.org/package/mingw-w64-ucrt-x86_64-libtheora"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "mingw-w64-ucrt-x86_64-libtiff",
+      "version": "4.7.2-2",
+      "bom-ref": "msys2:mingw-w64-ucrt-x86_64-libtiff@4.7.2-2",
+      "purl": "pkg:generic/msys2/mingw-w64-ucrt-x86_64-libtiff@4.7.2-2",
+      "licenses": [
+        {
+          "license": {
+            "name": "spdx:MIT"
+          }
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://packages.msys2.org/package/mingw-w64-ucrt-x86_64-libtiff"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "mingw-w64-ucrt-x86_64-libusb",
+      "version": "1.0.30-1",
+      "bom-ref": "msys2:mingw-w64-ucrt-x86_64-libusb@1.0.30-1",
+      "purl": "pkg:generic/msys2/mingw-w64-ucrt-x86_64-libusb@1.0.30-1",
+      "licenses": [
+        {
+          "license": {
+            "name": "spdx:LGPL-2.1"
+          }
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://packages.msys2.org/package/mingw-w64-ucrt-x86_64-libusb"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "mingw-w64-ucrt-x86_64-libva",
+      "version": "2.24.1-1",
+      "bom-ref": "msys2:mingw-w64-ucrt-x86_64-libva@2.24.1-1",
+      "purl": "pkg:generic/msys2/mingw-w64-ucrt-x86_64-libva@2.24.1-1",
+      "licenses": [
+        {
+          "license": {
+            "name": "spdx:MIT"
+          }
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://packages.msys2.org/package/mingw-w64-ucrt-x86_64-libva"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "mingw-w64-ucrt-x86_64-libvorbis",
+      "version": "1.3.7-3",
+      "bom-ref": "msys2:mingw-w64-ucrt-x86_64-libvorbis@1.3.7-3",
+      "purl": "pkg:generic/msys2/mingw-w64-ucrt-x86_64-libvorbis@1.3.7-3",
+      "licenses": [
+        {
+          "license": {
+            "name": "custom"
+          }
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://packages.msys2.org/package/mingw-w64-ucrt-x86_64-libvorbis"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "mingw-w64-ucrt-x86_64-libvpl",
+      "version": "2.17.0-1",
+      "bom-ref": "msys2:mingw-w64-ucrt-x86_64-libvpl@2.17.0-1",
+      "purl": "pkg:generic/msys2/mingw-w64-ucrt-x86_64-libvpl@2.17.0-1",
+      "licenses": [
+        {
+          "license": {
+            "name": "spdx:MIT"
+          }
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://packages.msys2.org/package/mingw-w64-ucrt-x86_64-libvpl"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "mingw-w64-ucrt-x86_64-libvpx",
+      "version": "1.17.0-1",
+      "bom-ref": "msys2:mingw-w64-ucrt-x86_64-libvpx@1.17.0-1",
+      "purl": "pkg:generic/msys2/mingw-w64-ucrt-x86_64-libvpx@1.17.0-1",
+      "licenses": [
+        {
+          "license": {
+            "name": "spdx:BSD-3-Clause"
+          }
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://packages.msys2.org/package/mingw-w64-ucrt-x86_64-libvpx"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "mingw-w64-ucrt-x86_64-libwebp",
+      "version": "1.6.0-1",
+      "bom-ref": "msys2:mingw-w64-ucrt-x86_64-libwebp@1.6.0-1",
+      "purl": "pkg:generic/msys2/mingw-w64-ucrt-x86_64-libwebp@1.6.0-1",
+      "licenses": [
+        {
+          "license": {
+            "name": "spdx:BSD-3-Clause"
+          }
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://packages.msys2.org/package/mingw-w64-ucrt-x86_64-libwebp"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "mingw-w64-ucrt-x86_64-libwinpthread",
+      "version": "14.0.0.r569.g34eeafb7d-1",
+      "bom-ref": "msys2:mingw-w64-ucrt-x86_64-libwinpthread@14.0.0.r569.g34eeafb7d-1",
+      "purl": "pkg:generic/msys2/mingw-w64-ucrt-x86_64-libwinpthread@14.0.0.r569.g34eeafb7d-1",
+      "licenses": [
+        {
+          "license": {
+            "name": "spdx:MIT AND BSD-3-Clause"
+          }
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://packages.msys2.org/package/mingw-w64-ucrt-x86_64-libwinpthread"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "mingw-w64-ucrt-x86_64-libx264",
+      "version": "0.165.r3222.b35605a-3",
+      "bom-ref": "msys2:mingw-w64-ucrt-x86_64-libx264@0.165.r3222.b35605a-3",
+      "purl": "pkg:generic/msys2/mingw-w64-ucrt-x86_64-libx264@0.165.r3222.b35605a-3",
+      "licenses": [
+        {
+          "license": {
+            "name": "custom"
+          }
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://packages.msys2.org/package/mingw-w64-ucrt-x86_64-libx264"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "mingw-w64-ucrt-x86_64-libxml2",
+      "version": "2.15.4-3",
+      "bom-ref": "msys2:mingw-w64-ucrt-x86_64-libxml2@2.15.4-3",
+      "purl": "pkg:generic/msys2/mingw-w64-ucrt-x86_64-libxml2@2.15.4-3",
+      "licenses": [
+        {
+          "license": {
+            "name": "spdx:MIT"
+          }
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://packages.msys2.org/package/mingw-w64-ucrt-x86_64-libxml2"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "mingw-w64-ucrt-x86_64-lz4",
+      "version": "1.10.0-1",
+      "bom-ref": "msys2:mingw-w64-ucrt-x86_64-lz4@1.10.0-1",
+      "purl": "pkg:generic/msys2/mingw-w64-ucrt-x86_64-lz4@1.10.0-1",
+      "licenses": [
+        {
+          "license": {
+            "name": "BSD"
+          }
+        },
+        {
+          "license": {
+            "name": "GPL2"
+          }
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://packages.msys2.org/package/mingw-w64-ucrt-x86_64-lz4"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "mingw-w64-ucrt-x86_64-md4c",
+      "version": "0.6.0-1",
+      "bom-ref": "msys2:mingw-w64-ucrt-x86_64-md4c@0.6.0-1",
+      "purl": "pkg:generic/msys2/mingw-w64-ucrt-x86_64-md4c@0.6.0-1",
+      "licenses": [
+        {
+          "license": {
+            "name": "spdx:MIT"
+          }
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://packages.msys2.org/package/mingw-w64-ucrt-x86_64-md4c"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "mingw-w64-ucrt-x86_64-mpg123",
+      "version": "1.33.7-1",
+      "bom-ref": "msys2:mingw-w64-ucrt-x86_64-mpg123@1.33.7-1",
+      "purl": "pkg:generic/msys2/mingw-w64-ucrt-x86_64-mpg123@1.33.7-1",
+      "licenses": [
+        {
+          "license": {
+            "name": "spdx:LGPL-2.1-or-later"
+          }
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://packages.msys2.org/package/mingw-w64-ucrt-x86_64-mpg123"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "mingw-w64-ucrt-x86_64-opencore-amr",
+      "version": "0.1.6-1",
+      "bom-ref": "msys2:mingw-w64-ucrt-x86_64-opencore-amr@0.1.6-1",
+      "purl": "pkg:generic/msys2/mingw-w64-ucrt-x86_64-opencore-amr@0.1.6-1",
+      "licenses": [
+        {
+          "license": {
+            "name": "Apache"
+          }
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://packages.msys2.org/package/mingw-w64-ucrt-x86_64-opencore-amr"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "mingw-w64-ucrt-x86_64-openjpeg2",
+      "version": "2.5.4-2",
+      "bom-ref": "msys2:mingw-w64-ucrt-x86_64-openjpeg2@2.5.4-2",
+      "purl": "pkg:generic/msys2/mingw-w64-ucrt-x86_64-openjpeg2@2.5.4-2",
+      "licenses": [
+        {
+          "license": {
+            "name": "spdx:BSD-2-Clause"
+          }
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://packages.msys2.org/package/mingw-w64-ucrt-x86_64-openjpeg2"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "mingw-w64-ucrt-x86_64-openssl",
+      "version": "3.6.5-1",
+      "bom-ref": "msys2:mingw-w64-ucrt-x86_64-openssl@3.6.5-1",
+      "purl": "pkg:generic/msys2/mingw-w64-ucrt-x86_64-openssl@3.6.5-1",
+      "licenses": [
+        {
+          "license": {
+            "name": "spdx:Apache-2.0"
+          }
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://packages.msys2.org/package/mingw-w64-ucrt-x86_64-openssl"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "mingw-w64-ucrt-x86_64-opus",
+      "version": "1.6.1-2",
+      "bom-ref": "msys2:mingw-w64-ucrt-x86_64-opus@1.6.1-2",
+      "purl": "pkg:generic/msys2/mingw-w64-ucrt-x86_64-opus@1.6.1-2",
+      "licenses": [
+        {
+          "license": {
+            "name": "spdx:BSD-3-Clause"
+          }
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://packages.msys2.org/package/mingw-w64-ucrt-x86_64-opus"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "mingw-w64-ucrt-x86_64-pango",
+      "version": "1.58.2-1",
+      "bom-ref": "msys2:mingw-w64-ucrt-x86_64-pango@1.58.2-1",
+      "purl": "pkg:generic/msys2/mingw-w64-ucrt-x86_64-pango@1.58.2-1",
+      "licenses": [
+        {
+          "license": {
+            "name": "spdx:LGPL-2.1"
+          }
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://packages.msys2.org/package/mingw-w64-ucrt-x86_64-pango"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "mingw-w64-ucrt-x86_64-pcre2",
+      "version": "10.49-1",
+      "bom-ref": "msys2:mingw-w64-ucrt-x86_64-pcre2@10.49-1",
+      "purl": "pkg:generic/msys2/mingw-w64-ucrt-x86_64-pcre2@10.49-1",
+      "licenses": [
+        {
+          "license": {
+            "name": "spdx:BSD-3-Clause"
+          }
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://packages.msys2.org/package/mingw-w64-ucrt-x86_64-pcre2"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "mingw-w64-ucrt-x86_64-pixman",
+      "version": "0.46.4-3",
+      "bom-ref": "msys2:mingw-w64-ucrt-x86_64-pixman@0.46.4-3",
+      "purl": "pkg:generic/msys2/mingw-w64-ucrt-x86_64-pixman@0.46.4-3",
+      "licenses": [
+        {
+          "license": {
+            "name": "spdx:MIT"
+          }
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://packages.msys2.org/package/mingw-w64-ucrt-x86_64-pixman"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "mingw-w64-ucrt-x86_64-qt6-base",
+      "version": "6.12.0-1",
+      "bom-ref": "msys2:mingw-w64-ucrt-x86_64-qt6-base@6.12.0-1",
+      "purl": "pkg:generic/msys2/mingw-w64-ucrt-x86_64-qt6-base@6.12.0-1",
+      "licenses": [
+        {
+          "license": {
+            "name": "spdx:LGPL-3.0-only WITH Qt-GPL-exception-1.0 AND AFL-2.1 AND Apache-2.0 AND BSL-1.0 AND CC0-1.0 AND BSD-3-Clause AND CC-BY-4.0 AND GFDL-1.3-no-invariants-only AND GPL-2.0-only AND GPL-2.0-or-later AND GPL-3.0-only AND custom"
+          }
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://packages.msys2.org/package/mingw-w64-ucrt-x86_64-qt6-base"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "mingw-w64-ucrt-x86_64-qt6-charts",
+      "version": "6.12.0-1",
+      "bom-ref": "msys2:mingw-w64-ucrt-x86_64-qt6-charts@6.12.0-1",
+      "purl": "pkg:generic/msys2/mingw-w64-ucrt-x86_64-qt6-charts@6.12.0-1",
+      "licenses": [
+        {
+          "license": {
+            "name": "spdx:GPL-3.0-only WITH Qt-GPL-exception-1.0 AND BSD-3-Clause AND GFDL-1.3-no-invariants-only"
+          }
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://packages.msys2.org/package/mingw-w64-ucrt-x86_64-qt6-charts"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "mingw-w64-ucrt-x86_64-qt6-svg",
+      "version": "6.12.0-1",
+      "bom-ref": "msys2:mingw-w64-ucrt-x86_64-qt6-svg@6.12.0-1",
+      "purl": "pkg:generic/msys2/mingw-w64-ucrt-x86_64-qt6-svg@6.12.0-1",
+      "licenses": [
+        {
+          "license": {
+            "name": "spdx:LGPL-3.0-only WITH Qt-GPL-exception-1.0 AND BSD-3-Clause AND GFDL-1.3-no-invariants-only AND GPL-2.0-only AND GPL-3.0-only"
+          }
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://packages.msys2.org/package/mingw-w64-ucrt-x86_64-qt6-svg"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "mingw-w64-ucrt-x86_64-rav1e",
+      "version": "0.8.1-1",
+      "bom-ref": "msys2:mingw-w64-ucrt-x86_64-rav1e@0.8.1-1",
+      "purl": "pkg:generic/msys2/mingw-w64-ucrt-x86_64-rav1e@0.8.1-1",
+      "licenses": [
+        {
+          "license": {
+            "name": "spdx:BSD-2-Clause"
+          }
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://packages.msys2.org/package/mingw-w64-ucrt-x86_64-rav1e"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "mingw-w64-ucrt-x86_64-sdl3",
+      "version": "3.4.18-1",
+      "bom-ref": "msys2:mingw-w64-ucrt-x86_64-sdl3@3.4.18-1",
+      "purl": "pkg:generic/msys2/mingw-w64-ucrt-x86_64-sdl3@3.4.18-1",
+      "licenses": [
+        {
+          "license": {
+            "name": "spdx:Zlib"
+          }
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://packages.msys2.org/package/mingw-w64-ucrt-x86_64-sdl3"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "mingw-w64-ucrt-x86_64-speex",
+      "version": "1.2.1-1",
+      "bom-ref": "msys2:mingw-w64-ucrt-x86_64-speex@1.2.1-1",
+      "purl": "pkg:generic/msys2/mingw-w64-ucrt-x86_64-speex@1.2.1-1",
+      "licenses": [
+        {
+          "license": {
+            "name": "BSD"
+          }
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://packages.msys2.org/package/mingw-w64-ucrt-x86_64-speex"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "mingw-w64-ucrt-x86_64-svt-av1",
+      "version": "4.2.0-1",
+      "bom-ref": "msys2:mingw-w64-ucrt-x86_64-svt-av1@4.2.0-1",
+      "purl": "pkg:generic/msys2/mingw-w64-ucrt-x86_64-svt-av1@4.2.0-1",
+      "licenses": [
+        {
+          "license": {
+            "name": "spdx:BSD-3-Clause-Clear"
+          }
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://packages.msys2.org/package/mingw-w64-ucrt-x86_64-svt-av1"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "mingw-w64-ucrt-x86_64-x265",
+      "version": "4.3-1",
+      "bom-ref": "msys2:mingw-w64-ucrt-x86_64-x265@4.3-1",
+      "purl": "pkg:generic/msys2/mingw-w64-ucrt-x86_64-x265@4.3-1",
+      "licenses": [
+        {
+          "license": {
+            "name": "GPL"
+          }
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://packages.msys2.org/package/mingw-w64-ucrt-x86_64-x265"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "mingw-w64-ucrt-x86_64-xvidcore",
+      "version": "1.3.7-5",
+      "bom-ref": "msys2:mingw-w64-ucrt-x86_64-xvidcore@1.3.7-5",
+      "purl": "pkg:generic/msys2/mingw-w64-ucrt-x86_64-xvidcore@1.3.7-5",
+      "licenses": [
+        {
+          "license": {
+            "name": "GPL"
+          }
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://packages.msys2.org/package/mingw-w64-ucrt-x86_64-xvidcore"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "mingw-w64-ucrt-x86_64-xz",
+      "version": "5.8.4-1",
+      "bom-ref": "msys2:mingw-w64-ucrt-x86_64-xz@5.8.4-1",
+      "purl": "pkg:generic/msys2/mingw-w64-ucrt-x86_64-xz@5.8.4-1",
+      "licenses": [
+        {
+          "license": {
+            "name": "spdx:0BSD AND LGPL-2.1-or-later AND GPL-2.0-or-later"
+          }
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://packages.msys2.org/package/mingw-w64-ucrt-x86_64-xz"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "mingw-w64-ucrt-x86_64-zlib",
+      "version": "1.3.2-3",
+      "bom-ref": "msys2:mingw-w64-ucrt-x86_64-zlib@1.3.2-3",
+      "purl": "pkg:generic/msys2/mingw-w64-ucrt-x86_64-zlib@1.3.2-3",
+      "licenses": [
+        {
+          "license": {
+            "name": "spdx:Zlib"
+          }
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://packages.msys2.org/package/mingw-w64-ucrt-x86_64-zlib"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "mingw-w64-ucrt-x86_64-zstd",
+      "version": "1.5.7-2",
+      "bom-ref": "msys2:mingw-w64-ucrt-x86_64-zstd@1.5.7-2",
+      "purl": "pkg:generic/msys2/mingw-w64-ucrt-x86_64-zstd@1.5.7-2",
+      "licenses": [
+        {
+          "license": {
+            "name": "spdx:BSD-3-Clause OR GPL-2.0-or-later"
+          }
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://packages.msys2.org/package/mingw-w64-ucrt-x86_64-zstd"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "mingw-w64-ucrt-x86_64-zvbi",
+      "version": "0.2.46-1",
+      "bom-ref": "msys2:mingw-w64-ucrt-x86_64-zvbi@0.2.46-1",
+      "purl": "pkg:generic/msys2/mingw-w64-ucrt-x86_64-zvbi@0.2.46-1",
+      "licenses": [
+        {
+          "license": {
+            "name": "spdx:GPL-2.0-or-later AND BSD-2-Clause AND LGPL-2.1-or-later AND MIT"
+          }
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://packages.msys2.org/package/mingw-w64-ucrt-x86_64-zvbi"
+        }
+      ]
+    }
+  ]
+}

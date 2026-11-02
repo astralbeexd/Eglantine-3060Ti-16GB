@@ -1,5 +1,5 @@
 # Eglantine-3060Ti-16GB
-HECHO COMPLETAMENTE CON IA EN BASE A LA RELEASE PUBLICA DE EGLANTINE STABLE 1.0.0.
+HECHO COMPLETAMENTE CON IA SOBRE EL CÓDIGO DE EGLANTINE NX2 (BASE EXACTA INDICADA ABAJO).
 Compilación comunitaria experimental para Windows, probada en Ryzen 7 5800X,
 RTX 3060 Ti de 8 GB y 16 GB de RAM. No es una versión oficial ni garantiza 60 FPS.
 
@@ -78,3 +78,12 @@ GPL-3.0-or-later para el programa, respetando los avisos y licencias por archivo
 Consulta [CREDITS.md](CREDITS.md), [CHANGES.md](CHANGES.md) y [DISTRIBUTION.md](DISTRIBUTION.md).
 Cambios y documentación preparados con asistencia de IA. No se afirma una revisión humana
 completa del código ni certificación de seguridad o estabilidad. No se ha enviado un PR al proyecto original.
+
+## Seguridad y trazabilidad
+
+Consulta [SECURITY.md](SECURITY.md), [AUDIT.md](AUDIT.md), el [estado de release](RELEASE-STATUS.json)
+y el [SBOM de bibliotecas dinámicas](SBOM.cdx.json). Los hashes y las pruebas no son una certificación de seguridad.
+
+Las cifras históricas de FPS usaron precisión de CPU Unsafe. El perfil público conserva Auto;
+no se deben extrapolar esas cifras a este perfil. Auto también activa algunas optimizaciones
+relajadas de Dynarmic; estos nombres describen precisión de emulación, no protección de Windows.

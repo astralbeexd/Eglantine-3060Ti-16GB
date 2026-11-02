@@ -1,0 +1,58 @@
+{
+  "base": "6bde8c20d1f7c020a920e59a989c03822a08445d",
+  "patches": [
+    "3060ti-memory-experimental.patch",
+    "3060ti-mejoras-v2-incremental.patch"
+  ],
+  "new_paths": [
+    "src/video_core/vulkan_common/heap_accounting.h"
+  ],
+  "modified_paths": [
+    "src/common/host_memory.cpp",
+    "src/common/host_memory.h",
+    "src/common/thread.cpp",
+    "src/core/hle/service/am/service/self_controller.cpp",
+    "src/core/hle/service/am/service/self_controller.h",
+    "src/core/hle/service/nx2_gsv.h",
+    "src/core/hle/service/service.cpp",
+    "src/input_common/drivers/tas_input.cpp",
+    "src/input_common/drivers/tas_input.h",
+    "src/video_core/CMakeLists.txt",
+    "src/video_core/renderer_opengl/gl_shader_cache.cpp",
+    "src/video_core/renderer_vulkan/vk_pipeline_cache.cpp",
+    "src/video_core/shader_cache.cpp",
+    "src/video_core/shader_cache.h",
+    "src/video_core/shader_environment.cpp",
+    "src/video_core/shader_environment.h",
+    "src/video_core/texture_cache/texture_cache.h",
+    "src/video_core/vulkan_common/heap_accounting.h",
+    "src/video_core/vulkan_common/vulkan_device.cpp",
+    "src/yuzu/main_window.cpp"
+  ],
+  "sha256": {
+    "modified/src/common/host_memory.cpp": "be52f33bbe0ffe1059695396882e1a70ef310be1897594b9b64bbcbe2f7a1d3f",
+    "modified/src/common/host_memory.h": "2936f555cf6c82585018770b6b0c7947216a246b3400948bd9c302347941f308",
+    "modified/src/common/thread.cpp": "8cfaac684158536bc4e161f220d3a029ac7526e87a5246990f57052b86823393",
+    "modified/src/core/hle/service/am/service/self_controller.cpp": "7ec0d3a60c3caaa4848e3266c3197f2744ee56bb228fd788d3d010e7e14db18c",
+    "modified/src/core/hle/service/am/service/self_controller.h": "f64c95eaa33c9491d4f36488186e11bc65779eee36be7cf4bb12d3a7b4c1e945",
+    "modified/src/core/hle/service/nx2_gsv.h": "cf72695f794e4885dcefd44b928e11a95cb468808d43812067f40e42c917d423",
+    "modified/src/core/hle/service/service.cpp": "f3205ae0feb4946851aa89fe7f33ad346a7534b79c2c7ffec0802382b99bd07d",
+    "modified/src/input_common/drivers/tas_input.cpp": "f3da202ef0424b1681153c7636c7fd8c451ba31af46df51c402a1264827c51d1",
+    "modified/src/input_common/drivers/tas_input.h": "bc87effeae6505156d41481c624e0492dc7ec7b3b8db6863886e9dfd20457c5a",
+    "modified/src/video_core/CMakeLists.txt": "3eb2db4a5ce33024e2dcffa0161537d71d4723256b1c4fb0a011d84d21a3cdac",
+    "modified/src/video_core/renderer_opengl/gl_shader_cache.cpp": "fcc584d70184231fde2801bc40d4abe6012392ca9e1df505b400499d61ba38d6",
+    "modified/src/video_core/renderer_vulkan/vk_pipeline_cache.cpp": "b91b39fb843d63d797d4d25362e878e9eb8074bd99c7a5fe6f306a0727a0dd4c",
+    "modified/src/video_core/shader_cache.cpp": "3e43e26b0cb3694ba2366b6471c1de7fc06126df96655f1683be429253062ec7",
+    "modified/src/video_core/shader_cache.h": "e585b3d0914a18ff6eaf7541db7a449c759bac05b7aa02393d6f42b17aac9bd9",
+    "modified/src/video_core/shader_environment.cpp": "44ac552c95d9b1c553768f58041f45be28534162fd91b71348a0f46888a97992",
+    "modified/src/video_core/shader_environment.h": "50114912463ca29dbe28b41899cfee6d59acbb48a7d304b4eff7f03f36075614",
+    "modified/src/video_core/texture_cache/texture_cache.h": "f80f8debe768f67445351255eb6bf2b23bdb7ca21c4188b204d2326af09dc549",
+    "modified/src/video_core/vulkan_common/heap_accounting.h": "bc668952e02ca13ee5730b227c0d84ced1d2f93a4a646db3da3175a55bf80375",
+    "modified/src/video_core/vulkan_common/vulkan_device.cpp": "a06e63dc8f2e589e4b4c8ad0316efc3554dfe521e1af70573528f1c90545fb3c",
+    "modified/src/yuzu/main_window.cpp": "af5e3261b4d0121a5fee11d2f527228c0813dd18210c02a3571e13b39aed0bd0",
+    "3060ti-memory-experimental.patch": "59bc349995a73025fbfb00abbc40b4a9cf05d97d1c1c47e022a2af764c6ab756",
+    "3060ti-mejoras-v2-incremental.patch": "d0b8905992e0e833c6cbe515fb21961819d52d92a2ccb24bd46315584c69c1ed",
+    "build-ucrt64.sh": "960963139b05535866015c1cbcf55d40d2a9101e4aedf817019480d9eb208b57",
+    "profile/qt-config.ini": "06612a55af28b489b733f31f3422dc72fc6d2e642a8f5d1ac020fd900d1762f8"
+  }
+}
