@@ -1,0 +1,18 @@
+{
+  "commit": "837f8e2f8d03f803ffafaa582467220a434594b8",
+  "workflow": "Verify experimental source",
+  "conclusion": "success",
+  "url": "https://github.com/astralbeexd/Eglantine-3060Ti-16GB/actions/runs/41379971968",
+  "scope": [
+    "patch reconstruction",
+    "20 modified source files",
+    "source hashes and public file checks",
+    "heap accounting invariants"
+  ],
+  "not_validated": [
+    "complete emulator security",
+    "malware absence",
+    "full Windows build in CI",
+    "all dependency vulnerabilities"
+  ]
+}

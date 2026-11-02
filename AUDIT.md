@@ -48,3 +48,6 @@ añadir el archivo de workflow no significa por sí solo que la ejecución haya 
 
 La build mantiene desactivados el actualizador y la presencia de Discord mediante sus opciones de compilación.
 No se garantiza una compilación reproducible bit a bit ni seguridad de todas las entradas de juego/mods.
+
+La comprobación remota del commit 837f8e2 terminó correctamente: [ejecución de GitHub Actions](https://github.com/astralbeexd/Eglantine-3060Ti-16GB/actions/runs/41379971968).
+Verifica los parches y la contabilidad; no certifica seguridad del ejecutable.
