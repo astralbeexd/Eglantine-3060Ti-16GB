@@ -1,0 +1,36 @@
+name: Build reduced video runtime
+on:
+  push:
+    paths:
+      - dependencies/**
+      - .github/workflows/video-runtime.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  build:
+    runs-on: windows-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - uses: msys2/setup-msys2@ec48f7c5447b3140e2b088413ae3a55687bccb6e
+        with:
+          msystem: UCRT64
+          update: false
+          install: >-
+            make diffutils patch
+            mingw-w64-ucrt-x86_64-gcc
+            mingw-w64-ucrt-x86_64-ffnvcodec-headers
+            mingw-w64-ucrt-x86_64-dav1d
+            mingw-w64-ucrt-x86_64-nasm
+            mingw-w64-ucrt-x86_64-pkgconf
+      - name: Build patched video-only libraries
+        shell: msys2 {0}
+        run: bash dependencies/build-video-runtime.sh
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: reduced-video-runtime
+          path: security-runtime/
+          retention-days: 14
