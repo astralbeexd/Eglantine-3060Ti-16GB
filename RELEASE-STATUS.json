@@ -13,5 +13,8 @@
   "current_corresponding_sources": "https://github.com/astralbeexd/Eglantine-3060Ti-16GB/releases/tag/security-sources-21a037c36009",
   "independent_security_review": "not_performed",
   "malware_free_certification": false,
-  "guaranteed_60_fps": false
+  "guaranteed_60_fps": false,
+  "experimental_binary_published": true,
+  "experimental_release_url": "https://github.com/astralbeexd/Eglantine-3060Ti-16GB/releases/tag/v1.0.0-3060ti16gb-romfs1",
+  "stable_release_ready": false
 }

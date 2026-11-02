@@ -1,0 +1,46 @@
+{
+  "url": "https://github.com/astralbeexd/Eglantine-3060Ti-16GB/releases/tag/v1.0.0-3060ti16gb-romfs1",
+  "tag": "v1.0.0-3060ti16gb-romfs1",
+  "published_at": "2026-11-02T05:53:42Z",
+  "prerelease": true,
+  "source_commit": "21a037c360097a2043f54f6c5e7d06842de9e503",
+  "release_target_commit": "b793b69bf0fb9ed2af201328c5f2a4b432f4a4a4",
+  "assets": [
+    {
+      "name": "ANTIVIRUS-LOADING-UPDATE.json",
+      "bytes": 1590,
+      "digest": "sha256:f4038fa291fd518da023f9194eb18bb99406f881f1f70b36f2c092980e8dd6f4",
+      "url": "https://github.com/astralbeexd/Eglantine-3060Ti-16GB/releases/download/v1.0.0-3060ti16gb-romfs1/ANTIVIRUS-LOADING-UPDATE.json"
+    },
+    {
+      "name": "Eglantine-3060Ti-16GB-actualizacion-carga.sha256.txt",
+      "bytes": 113,
+      "digest": "sha256:8b73676a7c8ef55f62b0776093fc35df9bc13314519703f4046659c705547c38",
+      "url": "https://github.com/astralbeexd/Eglantine-3060Ti-16GB/releases/download/v1.0.0-3060ti16gb-romfs1/Eglantine-3060Ti-16GB-actualizacion-carga.sha256.txt"
+    },
+    {
+      "name": "Eglantine-3060Ti-16GB-actualizacion-carga.zip",
+      "bytes": 20636715,
+      "digest": "sha256:03c22b464b420dcc7710bdc084370492b5f1e7c32e59b019eb5e8c389612461f",
+      "url": "https://github.com/astralbeexd/Eglantine-3060Ti-16GB/releases/download/v1.0.0-3060ti16gb-romfs1/Eglantine-3060Ti-16GB-actualizacion-carga.zip"
+    },
+    {
+      "name": "Eglantine-3060Ti-16GB-carga-corregida-portable.sha256.txt",
+      "bytes": 118,
+      "digest": "sha256:ec63fe7b46012e875d07bd52522ab2ba682b3d51859a25b5df5d4e81cbe648c0",
+      "url": "https://github.com/astralbeexd/Eglantine-3060Ti-16GB/releases/download/v1.0.0-3060ti16gb-romfs1/Eglantine-3060Ti-16GB-carga-corregida-portable.sha256.txt"
+    },
+    {
+      "name": "Eglantine-3060Ti-16GB-carga-corregida-portable.zip",
+      "bytes": 68636956,
+      "digest": "sha256:6c3f4acb1cd36058cea6e37aeadb4a34f35324acc5992ef6a7104e167aac21ae",
+      "url": "https://github.com/astralbeexd/Eglantine-3060Ti-16GB/releases/download/v1.0.0-3060ti16gb-romfs1/Eglantine-3060Ti-16GB-carga-corregida-portable.zip"
+    },
+    {
+      "name": "ROMFS-LOADING-REGRESSION.json",
+      "bytes": 1154,
+      "digest": "sha256:832f3263cd20931092d1909b9858cf7f3f67e1a652d6bd581f7ba45804a2cef8",
+      "url": "https://github.com/astralbeexd/Eglantine-3060Ti-16GB/releases/download/v1.0.0-3060ti16gb-romfs1/ROMFS-LOADING-REGRESSION.json"
+    }
+  ]
+}

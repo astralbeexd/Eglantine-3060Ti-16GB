@@ -7,9 +7,16 @@ RTX 3060 Ti de 8 GB y 16 GB de RAM. No es una versión oficial ni garantiza 60 F
 
 Este repositorio contiene los parches, los 27 archivos de código y configuración modificados,
 el perfil portátil y las instrucciones para reconstruir el programa desde una base exacta.
-**Todavía no hay un binario público verificado en Releases.** No descargues supuestas
-versiones de este proyecto desde enlaces ajenos. El paquete local está preparado como
-candidato; falta completar la entrega de fuentes de sus dependencias y adjuntarlo a una release.
+Ya está disponible la [prerelease experimental con ejecutables](https://github.com/astralbeexd/Eglantine-3060Ti-16GB/releases/tag/v1.0.0-3060ti16gb-romfs1).
+
+- **Primera instalación:** descarga `Eglantine-3060Ti-16GB-carga-corregida-portable.zip`,
+  extrae toda la carpeta y abre `Iniciar.cmd`.
+- **Actualizar el paquete de este repositorio:** descarga `Eglantine-3060Ti-16GB-actualizacion-carga.zip`,
+  cierra el emulador y reemplaza los dos ejecutables. Conserva `user`.
+
+La release incluye hashes SHA-256, recibos de pruebas y enlaces a las fuentes completas.
+Pasaron las pruebas aisladas de carga y ClamAV; una carrera completa sigue pendiente.
+Es una versión para probar, sin garantía de 60 FPS ni certificación de seguridad.
 
 ## Cambios principales
 
@@ -45,10 +52,10 @@ chocar contra una barrera: estas cifras no equivalen a una carrera completa ni a
 No hay demostración de funcionamiento con sólo 4 GB de RAM total: memoria privada,
 working set compartido y memoria comprometida son métricas distintas.
 
-## Uso del futuro paquete portátil
+## Uso del paquete portátil
 
 Extrae el ZIP completo en una carpeta con permisos de escritura; no ejecutes desde el ZIP.
-Abre `Iniciar.cmd`; las DLL y el perfil vendrán incluidos y no necesitarás MSYS2 para jugar.
+Abre `Iniciar.cmd`; las DLL y el perfil están incluidos y no necesitarás MSYS2 para jugar.
 `eglantine.exe` también abre directamente el perfil portátil incluido.
 Configura tu mando y aporta tu juego y archivos de consola necesarios mediante la interfaz.
 No se incluyen juegos, claves, firmware, NAND, partidas, perfiles personales ni cachés de shaders.
@@ -88,7 +95,7 @@ Las cifras históricas de FPS usaron precisión de CPU Unsafe. El perfil públic
 no se deben extrapolar esas cifras a este perfil. Auto también activa algunas optimizaciones
 relajadas de Dynarmic; estos nombres describen precisión de emulación, no protección de Windows.
 
-La revisión actual y sus pendientes están en [SECURITY-REVIEW.md](SECURITY-REVIEW.md). La nueva compilación y su runtime todavía requieren validación conjunta.
+La revisión actual y sus pendientes están en [SECURITY-REVIEW.md](SECURITY-REVIEW.md). La corrección de carga y los paquetes publicados pasaron las pruebas registradas; falta validar una carrera completa.
 
 ## Corrección de carga de RomFS extraído
 
