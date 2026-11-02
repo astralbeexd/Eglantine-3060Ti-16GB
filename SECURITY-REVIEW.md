@@ -54,3 +54,13 @@ La corrección de carga pasó las pruebas documentadas en
 Se añadió una protección al banco de pruebas privado para no abrir el emulador con
 margen insuficiente de memoria comprometida. No se modificó la configuración del
 archivo de paginación ni del antivirus de Windows. No hay garantía de seguridad ni 60 FPS.
+
+## Análisis del paquete con la corrección de carga
+
+ClamAV 1.5.4 terminó con salida 0: 228 archivos examinados, cero detecciones,
+sin errores ni alertas de límites. Incluyó la carpeta portable corregida y los dos ZIP
+exactos identificados en `evidence/ANTIVIRUS-LOADING-UPDATE.json`.
+Ese recibo externo es el resultado final; los documentos dentro de los ZIP son la
+instantánea anterior al análisis. No se modificaron los ZIP después del análisis.
+Las fuentes completas actualizadas se publicaron en `security-sources-21a037c36009`.
+La validación de una carrera completa sigue pendiente.

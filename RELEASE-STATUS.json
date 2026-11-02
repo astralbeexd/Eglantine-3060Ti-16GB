@@ -7,10 +7,10 @@
   "current_loading_tests": "Metadata, full RomFS index hash equivalence, repeated reads and lifetime regression passed",
   "current_full_race_validation": "pending; unattended test refused while Windows commit headroom is below safety threshold",
   "previous_candidate_validation": "6000 presents observed before security/runtime changes; does not validate current binaries",
-  "antivirus_scan": "previous security package: ClamAV 226 files, 0 detections; new loading-fix package pending rescan",
+  "antivirus_scan": "passed: ClamAV 1.5.4, 228 files, zero detections, exit 0; exact hashes in evidence/ANTIVIRUS-LOADING-UPDATE.json",
   "authenticode_signature": "not_signed",
-  "corresponding_dependency_sources": "https://github.com/astralbeexd/Eglantine-3060Ti-16GB/releases/tag/security-sources-98749eca2392",
-  "current_corresponding_sources": "27 modified files and four patches available; new complete source-only archive pending publication",
+  "corresponding_dependency_sources": "https://github.com/astralbeexd/Eglantine-3060Ti-16GB/releases/tag/security-sources-21a037c36009",
+  "current_corresponding_sources": "https://github.com/astralbeexd/Eglantine-3060Ti-16GB/releases/tag/security-sources-21a037c36009",
   "independent_security_review": "not_performed",
   "malware_free_certification": false,
   "guaranteed_60_fps": false

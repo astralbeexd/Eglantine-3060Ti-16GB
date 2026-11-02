@@ -1,0 +1,36 @@
+{
+  "engine": "ClamAV 1.5.4",
+  "exit_code": 0,
+  "known_signatures": 3628245,
+  "scanned_files": 228,
+  "infected_files": 0,
+  "duration_seconds": 99.654,
+  "scope": "Corrected portable directory and both exact update/full portable ZIP archives",
+  "archives": [
+    {
+      "name": "Eglantine-3060Ti-16GB-actualizacion-carga.zip",
+      "sha256": "03c22b464b420dcc7710bdc084370492b5f1e7c32e59b019eb5e8c389612461f",
+      "bytes": 20636715
+    },
+    {
+      "name": "Eglantine-3060Ti-16GB-carga-corregida-portable.zip",
+      "sha256": "6c3f4acb1cd36058cea6e37aeadb4a34f35324acc5992ef6a7104e167aac21ae",
+      "bytes": 68636956
+    }
+  ],
+  "database_sha256": {
+    "bytecode.cvd": "6d4aa01f219e988060fc419f495d07f27e0cdf1a2cccc065971da922c76f7ffb",
+    "daily.cvd": "412dc262c37b64e0575eaa75546aadb15c8fd1debba30f4c24b2960e99bcd256",
+    "main.cvd": "0b2182d229f46981ec8f535382222f7c9dfdd656b250ad47988b910a8d302365"
+  },
+  "binary_sha256": {
+    "eglantine.exe": "66ed65418991551007e783362cf99b0bf1cd9e5b2fd0d9b51c4b764f753fe1a0",
+    "eden-cli.exe": "1ad6e1b77975f56b4b957b0650a71b178016812da31c38350d2aabe9b60c4edb"
+  },
+  "source_commit": "21a037c360097a2043f54f6c5e7d06842de9e503",
+  "corresponding_sources": "https://github.com/astralbeexd/Eglantine-3060Ti-16GB/releases/tag/security-sources-21a037c36009",
+  "errors_or_limit_alerts": false,
+  "malware_free_certification": false,
+  "full_race_validated": false,
+  "embedded_package_status": "Snapshot prepared before scan; final scan result is bound to archive hashes in this separate receipt"
+}
