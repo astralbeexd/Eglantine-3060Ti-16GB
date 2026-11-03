@@ -1,0 +1,63 @@
+{
+  "archive": "Eglantine-Compatible-x64-r2.zip",
+  "sha256": "962e3770b7d8a4a5f4c6abf56d3ed56e6fd069307b644d10e54efb2ccd29dbd0",
+  "antivirus": {
+    "engine": "ClamAV 1.5.4",
+    "daily_database": 28173,
+    "infected_files": 0,
+    "exit_code": 0,
+    "scope": "Final ZIP including archive contents; no scan errors or limit alerts",
+    "end_time": "2026:11:03 01:06:51"
+  },
+  "previous_directory_and_zip_scan": {
+    "daily_database": 28172,
+    "scanned_files": 233,
+    "infected_files": 0,
+    "exit_code": 0
+  },
+  "startup": {
+    "startup_alive": true,
+    "stop_reason": "planned_startup_test_end",
+    "game_started": false,
+    "cpu_os_preflight": "cpu_x86_64_v2=1 windows_build=26300 os_target_ok=1",
+    "loaded_module_count": 151,
+    "msys2_modules_loaded": false,
+    "initial_memory_mib": {
+      "available": 6707.8,
+      "commit_available": 6341.2
+    },
+    "minimum_commit_available_mib": 2143.2,
+    "startup_scope": "20 seconds, clean profile, no game/console assets",
+    "default_directories_validated": 6
+  },
+  "dependencies": {
+    "pe_modules": 63,
+    "packaged_symbol_imports_checked": 15640,
+    "aslr_dep": "passed",
+    "packaged_symbol_mismatches": 0,
+    "native_or_zen_march_in_emulator_build": false,
+    "dynarmic_runtime_detection": true,
+    "opus_avx2_runtime_dispatch": true,
+    "limitations": "OS DLL availability checked only on local Windows 11; not proof of Windows 10 support"
+  },
+  "source_commit": "0e1a1e99f1a3bed1c85569bf1c9a523eccada7a4",
+  "source_ci": {
+    "run": 41593694919,
+    "result": "success"
+  },
+  "small_portability_tests_ci": {
+    "run": 41593694757,
+    "result": "success"
+  },
+  "source_distribution_ci": {
+    "run": 41593694920,
+    "result": "success"
+  },
+  "publication": "Compatible binary upload blocked: Windows Computer Use could not verify the Edge URL. Sources and edition guides are public.",
+  "limitations": [
+    "No Xeon or Windows 10 hardware validation",
+    "No full-race test; insufficient local commit headroom",
+    "Linux/macOS checks are small tests, not full emulator builds",
+    "Antivirus does not certify absence of malware"
+  ]
+}
