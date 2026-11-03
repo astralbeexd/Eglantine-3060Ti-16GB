@@ -1,0 +1,17 @@
+{
+  "target_cpu": "Ryzen 5 5600",
+  "target_gpu": "RTX 2050, assumed 4 GB VRAM",
+  "host_ram_gib": 16,
+  "target_hardware_validated": false,
+  "gameplay_validated": false,
+  "fps_improvement_measured": false,
+  "launcher_tests": "passed with Clang 23.1.4 and GCC 16.2; real fixture child, Unicode/spaces, default and opt-in profiles, inherited variables",
+  "emulator_core_changed": false,
+  "pipeline_workers": 3,
+  "small_vram_policy": "existing opt-in policy enabled",
+  "astc": "existing BC3 path explicitly configured, not a new compressor",
+  "resolution_scale": "1x",
+  "speed_limit_percent": 100,
+  "local_game_test": "not started: only 3881 MiB commit headroom before a game",
+  "limitations": "A VRAM cap or CPU affinity on another GPU/CPU does not reproduce target performance"
+}

@@ -13,6 +13,16 @@ static int supports_v2(unsigned basic_ecx, unsigned extended_ecx) {
     return (basic_ecx & required) == required && (extended_ecx & 1u);
 }
 
+static int consume_low_vram_profile(const wchar_t** arguments) {
+    const wchar_t flag[]=L"--perfil-4gb";
+    const size_t length=(sizeof(flag)/sizeof(flag[0]))-1;
+    if (wcsncmp(*arguments,flag,length)!=0 ||
+        ((*arguments)[length] && (*arguments)[length]!=L' ' && (*arguments)[length]!=L'\t')) return 0;
+    *arguments+=length;
+    while (**arguments==L' ' || **arguments==L'\t') ++*arguments;
+    return 1;
+}
+
 #ifdef COMPAT_TEST
 int main(void) {
     const unsigned bits[] = {0,9,13,19,20,23};
@@ -20,6 +30,12 @@ int main(void) {
     for (unsigned i=0;i<6;++i) mask |= 1u << bits[i];
     if (!supports_v2(mask,1) || supports_v2(mask,0)) return 1;
     for (unsigned i=0;i<6;++i) if (supports_v2(mask & ~(1u << bits[i]),1)) return 2;
+    const wchar_t* arguments=L"--perfil-4gb \t\"juego con espacios\"";
+    if (!consume_low_vram_profile(&arguments) || wcscmp(arguments,L"\"juego con espacios\"")) return 3;
+    arguments=L"--perfil-4gb-extra";
+    if (consume_low_vram_profile(&arguments) || wcscmp(arguments,L"--perfil-4gb-extra")) return 4;
+    arguments=L"--perfil-4gb";
+    if (!consume_low_vram_profile(&arguments) || *arguments) return 5;
     puts("PASS: x86-64-v2 required-feature checks");
     return 0;
 }
@@ -54,6 +70,8 @@ static int clean_environment(void) {
 
 int WINAPI wWinMain(HINSTANCE instance,HINSTANCE previous,PWSTR arguments,int show) {
     (void)instance; (void)previous; (void)show;
+    const wchar_t* emulator_arguments=arguments;
+    const int low_vram=consume_low_vram_profile(&emulator_arguments);
     unsigned a=0,b=0,c=0,d=0,base=0,extended=0;
     if (__get_cpuid(1,&a,&b,&c,&d)) base=c;
     if (__get_cpuid(0x80000001u,&a,&b,&c,&d)) extended=c;
@@ -65,8 +83,8 @@ int WINAPI wWinMain(HINSTANCE instance,HINSTANCE previous,PWSTR arguments,int sh
     }
     const int cpu_ok=supports_v2(base,extended);
     const int os_ok=version.dwMajorVersion>=10 && version.dwBuildNumber>=17763;
-    if (wcscmp(arguments,L"--check")==0) {
-        printf("cpu_x86_64_v2=%d windows_build=%lu os_target_ok=%d\n",cpu_ok,version.dwBuildNumber,os_ok);
+    if (wcscmp(emulator_arguments,L"--check")==0) {
+        printf("cpu_x86_64_v2=%d windows_build=%lu os_target_ok=%d profile_4gb=%d\n",cpu_ok,version.dwBuildNumber,os_ok,low_vram);
         return cpu_ok && os_ok ? 0 : 3;
     }
     if (!os_ok) {
@@ -83,11 +101,13 @@ int WINAPI wWinMain(HINSTANCE instance,HINSTANCE previous,PWSTR arguments,int sh
     *slash=L'\0';
     if (swprintf(exe,32768,L"%ls\\eglantine.exe",directory)<0) return 5;
     /* Preserve the raw Windows argument quoting; never invoke a shell. */
-    size_t capacity=wcslen(exe)+wcslen(arguments)+4;
+    size_t capacity=wcslen(exe)+wcslen(emulator_arguments)+4;
     if (capacity>32767) { explain(L"Los argumentos son demasiado largos."); return 5; }
     wchar_t* command=HeapAlloc(GetProcessHeap(),0,capacity*sizeof(wchar_t));
     if (!command) { explain(L"No hay memoria para iniciar el emulador."); return 5; }
-    if (swprintf(command,capacity,L"\"%ls\" %ls",exe,arguments)<0 || !clean_environment()) {
+    if (swprintf(command,capacity,L"\"%ls\" %ls",exe,emulator_arguments)<0 || !clean_environment() ||
+        (low_vram && (!SetEnvironmentVariableW(L"EDEN_NX2_PIPELINE_WORKERS",L"3") ||
+                      !SetEnvironmentVariableW(L"EDEN_NX2_SMALL_VRAM_PROFILE",L"1")))) {
         HeapFree(GetProcessHeap(),0,command);
         explain(L"No se pudo preparar el entorno del emulador."); return 5;
     }

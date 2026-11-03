@@ -31,4 +31,11 @@ with tempfile.TemporaryDirectory(prefix='eglantine-revision-\u00e1 ') as folder:
     assert (root/'launcher-child-ok.txt').read_text().startswith('PASS:')
     result=subprocess.run([str(launcher),'--check'],env=env,check=True,capture_output=True,text=True,timeout=10)
     assert 'cpu_x86_64_v2=1' in result.stdout and 'os_target_ok=1' in result.stdout
+    (root/'launcher-child-ok.txt').unlink()
+    env['EDEN_NX2_PIPELINE_WORKERS']='64'
+    subprocess.run([str(launcher),'--perfil-4gb','archivo con espacios \u00e1.nsp','--prueba','--espera-4gb'],
+                   cwd=root.parent,env=env,check=True,timeout=15)
+    assert (root/'launcher-child-ok.txt').read_text().startswith('PASS:')
+    result=subprocess.run([str(launcher),'--perfil-4gb','--check'],env=env,check=True,capture_output=True,text=True,timeout=10)
+    assert 'profile_4gb=1' in result.stdout
 print('PASS: real child process, quoted Unicode arguments, working directory, environment and preflight')
