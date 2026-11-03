@@ -1,0 +1,38 @@
+{
+  "archive": "Eglantine-RTX2050-4GB-experimental.zip",
+  "sha256": "25bcf9c0245869f7f5f878dd2d05ccb7e992fd1c7dbbfd35028cd7eefe978bf1",
+  "source_commit": "33cb356549ee10a37f4af289ecaed93eb85069d4",
+  "antivirus": {
+    "engine": "ClamAV 1.5.4",
+    "daily_database": 28173,
+    "infected_files": 0,
+    "exit_code": 0,
+    "scope": "Final ZIP including archive contents; no scan errors or limit alerts",
+    "end_time": "2026:11:03 17:40:04"
+  },
+  "pe_dependency_audit": {
+    "pe_modules": 63,
+    "packaged_symbol_imports_checked": 15640,
+    "aslr_dep": "passed",
+    "packaged_symbol_mismatches": 0,
+    "native_or_zen_march_in_emulator_build": false,
+    "dynarmic_runtime_detection": true,
+    "opus_avx2_runtime_dispatch": true,
+    "limitations": "OS DLL availability checked only on local Windows 11; not proof of Windows 10 support"
+  },
+  "launcher_integration": "passed with Clang and GCC, both default and opt-in profiles; real fixture process, not a game",
+  "ci": {
+    "source_checks": 41740631691,
+    "small_portability_checks": 41740631723,
+    "result": "success"
+  },
+  "target_hardware_validated": false,
+  "gameplay_validated": false,
+  "fps_improvement_measured": false,
+  "limitations": [
+    "Assumes RTX 2050 with 4 GB VRAM",
+    "Core binaries identical to Compatible r2",
+    "Local game benchmark not started: insufficient Windows commit headroom",
+    "No detection does not certify absence of malware"
+  ]
+}
