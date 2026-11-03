@@ -1,0 +1,34 @@
+{
+  "archive": "Eglantine-Compatible-Windows-x64-revisado.zip",
+  "sha256": "983f34a8ad993900c71d7d1db3e6b0f207487967b5abad88335f02789f3a42fa",
+  "engine": "ClamAV 1.5.4",
+  "database_daily": 28172,
+  "known_viruses": 3628245,
+  "scanned_files": 232,
+  "infected_files": 0,
+  "scan_scope": "Complete extracted runtime and final ZIP; no scan errors or limit alerts",
+  "scan_exit_code": 0,
+  "scan_local_date": "2026:11:02 21:09:48",
+  "source_commit": "351177dff9d822200dec9b415646aa9ee80deda3",
+  "ci": {
+    "run": 41570255678,
+    "windows": "passed, including launcher integration",
+    "ubuntu": "passed, small tests only",
+    "macos": "passed, small tests only"
+  },
+  "dependencies": {
+    "pe_modules": 63,
+    "packaged_symbol_imports_checked": 15640,
+    "aslr_dep": "passed",
+    "packaged_symbol_mismatches": 0,
+    "native_or_zen_march_in_emulator_build": false,
+    "dynarmic_runtime_detection": true,
+    "opus_avx2_runtime_dispatch": true,
+    "limitations": "OS DLL availability checked only on local Windows 11; not proof of Windows 10 support"
+  },
+  "limitations": [
+    "No Xeon or Windows 10 hardware test",
+    "No full-race test for these binaries",
+    "No detection does not certify absence of malware"
+  ]
+}
