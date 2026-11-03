@@ -28,6 +28,30 @@ static void explain(const wchar_t* text) {
     MessageBoxW(NULL,text,L"Eglantine - compatibilidad",MB_OK | MB_ICONERROR);
 }
 
+/* Apply the same clean defaults whether opened through the CMD or directly. */
+static int clean_environment(void) {
+    wchar_t windows[32768], search_path[32768];
+    UINT length=GetWindowsDirectoryW(windows,32768);
+    if (!length || length>=32768 ||
+        swprintf(search_path,32768,L"%ls\\System32;%ls",windows,windows)<0) return 0;
+    LPWCH variables=GetEnvironmentStringsW();
+    if (!variables) return 0;
+    int ok=1;
+    for (const wchar_t* entry=variables; *entry; entry+=wcslen(entry)+1) {
+        if (_wcsnicmp(entry,L"EDEN_NX2_",9)!=0) continue;
+        const wchar_t* equals=wcschr(entry,L'=');
+        if (!equals || equals-entry>=32768) continue;
+        wchar_t name[32768];
+        wmemcpy(name,entry,(size_t)(equals-entry));name[equals-entry]=L'\0';
+        if (!SetEnvironmentVariableW(name,NULL)) ok=0;
+    }
+    FreeEnvironmentStringsW(variables);
+    return SetEnvironmentVariableW(L"PATH",search_path) &&
+           SetEnvironmentVariableW(L"QT_PLUGIN_PATH",NULL) &&
+           SetEnvironmentVariableW(L"QT_QPA_PLATFORM_PLUGIN_PATH",NULL) &&
+           SetEnvironmentVariableW(L"EDEN_NX2_SMALL_VRAM_PROFILE",L"0") && ok;
+}
+
 int WINAPI wWinMain(HINSTANCE instance,HINSTANCE previous,PWSTR arguments,int show) {
     (void)instance; (void)previous; (void)show;
     unsigned a=0,b=0,c=0,d=0,base=0,extended=0;
@@ -58,16 +82,25 @@ int WINAPI wWinMain(HINSTANCE instance,HINSTANCE previous,PWSTR arguments,int sh
     if (!slash) return 5;
     *slash=L'\0';
     if (swprintf(exe,32768,L"%ls\\eglantine.exe",directory)<0) return 5;
-    SetEnvironmentVariableW(L"QT_PLUGIN_PATH",NULL);
-    SetEnvironmentVariableW(L"QT_QPA_PLATFORM_PLUGIN_PATH",NULL);
+    /* Preserve the raw Windows argument quoting; never invoke a shell. */
+    size_t capacity=wcslen(exe)+wcslen(arguments)+4;
+    if (capacity>32767) { explain(L"Los argumentos son demasiado largos."); return 5; }
+    wchar_t* command=HeapAlloc(GetProcessHeap(),0,capacity*sizeof(wchar_t));
+    if (!command) { explain(L"No hay memoria para iniciar el emulador."); return 5; }
+    if (swprintf(command,capacity,L"\"%ls\" %ls",exe,arguments)<0 || !clean_environment()) {
+        HeapFree(GetProcessHeap(),0,command);
+        explain(L"No se pudo preparar el entorno del emulador."); return 5;
+    }
     STARTUPINFOW startup={0};startup.cb=sizeof(startup);
     PROCESS_INFORMATION process={0};
-    if (!CreateProcessW(exe,NULL,NULL,NULL,FALSE,0,NULL,directory,&startup,&process)) {
+    if (!CreateProcessW(exe,command,NULL,NULL,FALSE,0,NULL,directory,&startup,&process)) {
         DWORD error=GetLastError();
+        HeapFree(GetProcessHeap(),0,command);
         wchar_t message[512];
         swprintf(message,512,L"No se pudo abrir eglantine.exe (error Windows %lu). Extrae el ZIP completo y conserva juntos el programa y sus DLL.",error);
         explain(message);return 6;
     }
+    HeapFree(GetProcessHeap(),0,command);
     CloseHandle(process.hThread);
     WaitForSingleObject(process.hProcess,INFINITE);
     DWORD result=0;

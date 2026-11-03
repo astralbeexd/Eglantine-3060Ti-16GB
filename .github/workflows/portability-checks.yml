@@ -36,3 +36,11 @@ jobs:
         run: |
           c++ -std=c++20 -O2 -Wall -Wextra -Werror tests/fs_enumeration_test.cpp -o work/fs-check
           ./work/fs-check work/portability-fixture
+      - name: Test Windows compatibility launcher without a game
+        if: runner.os == 'Windows'
+        run: |
+          gcc -std=c11 -O2 -march=x86-64 -mtune=generic -Wall -Wextra -Werror -DCOMPAT_TEST tools/compat_launcher.c -o work/launcher-cpu-test.exe
+          ./work/launcher-cpu-test.exe
+          gcc -std=c11 -O2 -march=x86-64 -mtune=generic -Wall -Wextra -Werror -Wno-cast-function-type -municode -mwindows -static tools/compat_launcher.c -o work/launcher.exe
+          gcc -std=c11 -O2 -march=x86-64 -mtune=generic -Wall -Wextra -Werror -municode -static tests/compat_launcher_child.c -o work/launcher-child.exe
+          python3 tests/compat_launcher_integration.py --launcher work/launcher.exe --child work/launcher-child.exe

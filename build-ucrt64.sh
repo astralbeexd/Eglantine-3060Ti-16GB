@@ -7,7 +7,17 @@ if [[ "${MSYSTEM:-}" != UCRT64 ]]; then
 fi
 
 cd -- "$(dirname -- "${BASH_SOURCE[0]}")"
-trap 'status=$?; printf "\nLa compilaciÃƒÂ³n se detuvo (cÃƒÂ³digo %s). Conserva el ÃƒÂºltimo error mostrado.\n" "$status" >&2' ERR
+trap 'status=$?; printf "\nLa compilacion se detuvo (codigo %s). Conserva el ultimo error mostrado.\n" "$status" >&2' ERR
+
+# Separate output directories prevent mixing objects built for different CPUs.
+cpu_profile=${EGLANTINE_CPU_PROFILE:-compatible}
+case "$cpu_profile" in
+    compatible) cpu_flags=(-march=x86-64-v2 -mtune=generic) ;;
+    zen3) cpu_flags=(-march=znver3 -mtune=znver3) ;;
+    *) printf '%s\n' 'EGLANTINE_CPU_PROFILE debe ser compatible o zen3.' >&2; exit 2 ;;
+esac
+build_dir="Eglantine/build/$cpu_profile"
+
 
 printf '%s\n' 'Si MSYS2 actualiza su runtime y cierra esta terminal, vuelve a abrir UCRT64 y ejecuta este script otra vez.'
 
@@ -32,14 +42,6 @@ pacman -S --needed --noconfirm \
     mingw-w64-ucrt-x86_64-jbigkit mingw-w64-ucrt-x86_64-xz \
     mingw-w64-ucrt-x86_64-libdeflate mingw-w64-ucrt-x86_64-bzip2
 
-# Separate output directories prevent mixing objects built for different CPUs.
-cpu_profile=${EGLANTINE_CPU_PROFILE:-compatible}
-case "$cpu_profile" in
-    compatible) cpu_flags=(-march=x86-64-v2 -mtune=generic) ;;
-    zen3) cpu_flags=(-march=znver3 -mtune=znver3) ;;
-    *) printf '%s\n' 'EGLANTINE_CPU_PROFILE debe ser compatible o zen3.' >&2; exit 2 ;;
-esac
-build_dir="Eglantine/build/$cpu_profile"
 
 base=6bde8c20d1f7c020a920e59a989c03822a08445d
 if [[ ! -e Eglantine ]]; then
@@ -50,11 +52,11 @@ elif [[ ! -d Eglantine/.git ]] || [[ "$(git -C Eglantine rev-parse HEAD)" != "$b
     exit 1
 fi
 if git -C Eglantine apply --reverse --check ../3060ti-mejoras-v2-incremental.patch 2>/dev/null; then
-    printf '%s\n' 'Los parches de esta versiÃƒÂ³n ya estÃƒÂ¡n aplicados.'
+    printf '%s\n' 'Los parches de esta version ya estan aplicados.'
 else
 for patch_file in 3060ti-memory-experimental.patch 3060ti-mejoras-v2-incremental.patch; do
     if git -C Eglantine apply --reverse --check "../$patch_file" 2>/dev/null; then
-        printf '%s\n' "El parche $patch_file ya estÃƒÂ¡ aplicado."
+        printf '%s\n' "El parche $patch_file ya esta aplicado."
     else
         git -C Eglantine apply --check "../$patch_file"
         git -C Eglantine apply "../$patch_file"
@@ -117,7 +119,7 @@ clang++ -std=c++20 -O2 "${cpu_flags[@]}" -UNDEBUG -I Eglantine/src \
     -lfmt -lzstd -lws2_32 -lbcrypt -lboost_context-mt -lole32 -luuid -lshell32 -lntdll \
     -o tests/thread_name_test.exe
 ./tests/thread_name_test.exe
-printf '%s\n' "CompilaciÃƒÂ³n terminada: ${build_dir}/bin/eglantine.exe"
+printf '%s\n' "Compilacion terminada: ${build_dir}/bin/eglantine.exe"
 
 clang -std=c11 -O2 -march=x86-64 -mtune=generic -Wall -Wextra -Werror -DCOMPAT_TEST \
     tools/compat_launcher.c -o tests/compat_launcher_test.exe
