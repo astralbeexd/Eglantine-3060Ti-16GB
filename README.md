@@ -5,7 +5,7 @@
 | Edición | CPU | Estado |
 | --- | --- | --- |
 | [Zen 3](ediciones/zen3/README.md) | AMD Zen 3; referencia: Ryzen 7 5800X | ZIP público disponible. |
-| [Compatible](ediciones/compatible/README.md) | Más Intel y AMD x64 con x86-64-v2 | ZIP preparado; subida pública pendiente. |
+| [Compatible](ediciones/compatible/README.md) | Más Intel y AMD x64 con x86-64-v2 | [Descargar ZIP compatible](https://github.com/astralbeexd/Eglantine-3060Ti-16GB/releases/download/v1.0.0-compatible-x64-r2/Eglantine-Compatible-x64-r2.zip) · [Release](https://github.com/astralbeexd/Eglantine-3060Ti-16GB/releases/tag/v1.0.0-compatible-x64-r2). |
 
 Emulador comunitario **experimental para Windows**, basado en Eglantine. Pensado para probarlo sin compilar ni instalar MSYS2.
 
@@ -53,9 +53,8 @@ contiene tu configuración y puede contener partidas y archivos de consola.
 
 ## Compatibilidad con otros equipos
 
-El ZIP publicado actualmente sigue siendo la edición **Zen 3**. Ya se compiló un candidato
-genérico x86-64-v2 y pasó la prueba de arranque en Windows 11. Su validación en otros CPU,
-en Windows 10 y en una carrera completa sigue pendiente; aún no tiene una release binaria pública.
+Hay dos descargas separadas: **Zen 3** y [**Compatible x86-64-v2**](https://github.com/astralbeexd/Eglantine-3060Ti-16GB/releases/tag/v1.0.0-compatible-x64-r2).
+La compatible pasó el arranque en Windows 11; su validación en otros CPU, Windows 10 y una carrera completa sigue pendiente.
 Consulta [qué CPU y sistemas operativos están probados y cuáles siguen pendientes](COMPATIBILIDAD.md).
 
 ## Antes de probar

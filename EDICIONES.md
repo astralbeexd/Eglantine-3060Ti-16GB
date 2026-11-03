@@ -5,7 +5,7 @@ Las dos ediciones pertenecen al mismo repositorio. La tarjeta grafica y la canti
 | Edicion | Procesadores | Descarga y estado |
 | --- | --- | --- |
 | **Zen 3** | AMD Zen 3; referencia probada: Ryzen 7 5800X. Ejemplos de esa arquitectura: 5600X, 5900X y 5950X, sin pruebas propias en esos modelos. | [Release Zen 3](https://github.com/astralbeexd/Eglantine-3060Ti-16GB/releases/tag/v1.0.0-3060ti16gb-romfs1). El ZIP antiguo conserva su nombre 3060Ti-16GB. |
-| **Compatible x86-64-v2** | Intel y AMD x64 que cumplan x86-64-v2. Usa esta opcion si no sabes si tu CPU es Zen 3. | Compilada y probada al arrancar en el 5800X. ZIP preparado localmente; subida publica pendiente. No descargues el ZIP Zen 3 como sustituto para un Intel. |
+| **Compatible x86-64-v2** | Intel y AMD x64 que cumplan x86-64-v2. Usa esta opcion si no sabes si tu CPU es Zen 3. | [Descargar ZIP compatible](https://github.com/astralbeexd/Eglantine-3060Ti-16GB/releases/download/v1.0.0-compatible-x64-r2/Eglantine-Compatible-x64-r2.zip) · [Release y pruebas](https://github.com/astralbeexd/Eglantine-3060Ti-16GB/releases/tag/v1.0.0-compatible-x64-r2). Arranque probado en el 5800X; otros CPU pendientes de validación. |
 
 El Xeon E5-2697 v3 del reporte sigue pendiente de una prueba real con esta edicion. No se declara resuelto su fallo sin esa comprobacion.
 
