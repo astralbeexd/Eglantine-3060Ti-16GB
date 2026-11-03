@@ -92,6 +92,11 @@ if ! git -C Eglantine apply --reverse --check ../3060ti-romfs-loading.patch 2>/d
     git -C Eglantine apply ../3060ti-romfs-loading.patch
 fi
 
+if ! git -C Eglantine apply --reverse --check ../3060ti-portable-paths.patch 2>/dev/null; then
+    git -C Eglantine apply --check ../3060ti-portable-paths.patch
+    git -C Eglantine apply ../3060ti-portable-paths.patch
+fi
+
 cmake -S Eglantine -B ${build_dir} -G Ninja \
     -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING=OFF -DYUZU_TESTS=OFF \
     -DENABLE_QT=ON -DYUZU_CMD=ON -DYUZU_ROOM=OFF \

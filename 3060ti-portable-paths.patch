@@ -1,0 +1,27 @@
+--- a/src/frontend_common/config.cpp
++++ b/src/frontend_common/config.cpp
+@@ -275,7 +275,10 @@
+     using namespace Common::FS;
+ 
+     const auto setPath = [this](const EdenPath& path, const char* setting) {
+-        SetEdenPath(path, ReadStringSetting(std::string(setting)));
++        const auto configured_path = ReadStringSetting(std::string(setting));
++        if (!configured_path.empty()) {
++            SetEdenPath(path, configured_path);
++        }
+     };
+ 
+     setPath(EdenPath::NANDDir, "nand_directory");
+@@ -378,8 +381,10 @@
+     BeginGroup(Settings::TranslateCategory(Settings::Category::Screenshots));
+ 
+     ReadCategory(Settings::Category::Screenshots);
+-    FS::SetEdenPath(FS::EdenPath::ScreenshotsDir,
+-                    ReadStringSetting(std::string("screenshot_path")));
++    const auto screenshot_path = ReadStringSetting(std::string("screenshot_path"));
++    if (!screenshot_path.empty()) {
++        FS::SetEdenPath(FS::EdenPath::ScreenshotsDir, screenshot_path);
++    }
+ 
+     EndGroup();
+ }

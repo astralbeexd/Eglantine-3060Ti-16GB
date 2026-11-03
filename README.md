@@ -1,10 +1,17 @@
-# Eglantine · RTX 3060 Ti / 16 GB
+# Eglantine · Zen 3 y Compatible x86-64-v2
+
+**[Elige la edición según tu procesador](EDICIONES.md)**
+
+| Edición | CPU | Estado |
+| --- | --- | --- |
+| [Zen 3](ediciones/zen3/README.md) | AMD Zen 3; referencia: Ryzen 7 5800X | ZIP público disponible. |
+| [Compatible](ediciones/compatible/README.md) | Más Intel y AMD x64 con x86-64-v2 | ZIP preparado; subida pública pendiente. |
 
 Emulador comunitario **experimental para Windows**, basado en Eglantine. Pensado para probarlo sin compilar ni instalar MSYS2.
 
 ## Empieza aquí
 
-### 1. Descarga el paquete completo
+### 1. Descarga el paquete completo — edición Zen 3
 
 **[⬇ Descargar el emulador para Windows (ZIP, unos 69 MB)](https://github.com/astralbeexd/Eglantine-3060Ti-16GB/releases/download/v1.0.0-3060ti16gb-romfs1/Eglantine-3060Ti-16GB-carga-corregida-portable.zip)**
 

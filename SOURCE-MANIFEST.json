@@ -4,7 +4,8 @@
     "3060ti-memory-experimental.patch",
     "3060ti-mejoras-v2-incremental.patch",
     "3060ti-security-surface.patch",
-    "3060ti-romfs-loading.patch"
+    "3060ti-romfs-loading.patch",
+    "3060ti-portable-paths.patch"
   ],
   "new_paths": [
     "src/video_core/vulkan_common/heap_accounting.h"
@@ -36,7 +37,8 @@
     "src/video_core/vulkan_common/heap_accounting.h",
     "src/video_core/vulkan_common/vulkan_device.cpp",
     "src/yuzu/main_window.cpp",
-    "src/yuzu/updater/update_dialog.cpp"
+    "src/yuzu/updater/update_dialog.cpp",
+    "src/frontend_common/config.cpp"
   ],
   "sha256": {
     "modified/src/common/host_memory.cpp": "be52f33bbe0ffe1059695396882e1a70ef310be1897594b9b64bbcbe2f7a1d3f",
@@ -61,7 +63,7 @@
     "modified/src/yuzu/main_window.cpp": "af5e3261b4d0121a5fee11d2f527228c0813dd18210c02a3571e13b39aed0bd0",
     "3060ti-memory-experimental.patch": "59bc349995a73025fbfb00abbc40b4a9cf05d97d1c1c47e022a2af764c6ab756",
     "3060ti-mejoras-v2-incremental.patch": "d0b8905992e0e833c6cbe515fb21961819d52d92a2ccb24bd46315584c69c1ed",
-    "build-ucrt64.sh": "d5c07f9f3da431419d0dfdbd5707ce9a3811c2e656b2aa33f9a468fa4386f6dd",
+    "build-ucrt64.sh": "3efa8e650ae2c0c7898f87643dd75cb8b47900f1d65c61a1d9cf1a3647364280",
     "profile/qt-config.ini": "06612a55af28b489b733f31f3422dc72fc6d2e642a8f5d1ac020fd900d1762f8",
     "modified/cpmfile.json": "7e01c74fa5299cf0c2443dcee0a36673989284c338bd3c80c4695c5caf0dbadc",
     "modified/src/yuzu/updater/update_dialog.cpp": "c622902d7de2eb1e6c28ffded3a3d12ad22e18e2b446c15066aa455e19599ccb",
@@ -71,6 +73,8 @@
     "modified/src/core/file_sys/vfs/vfs_real.cpp": "0ae831b4fb934b9a7092dd17d5a2e42d5f579bd99dbacc39bb9bdbf6bf18d18b",
     "modified/src/core/loader/deconstructed_rom_directory.cpp": "3bf05fee7e30ab0bd80a4390207d66dae745ee4c6db383b18f975d81ebb7c0b5",
     "modified/src/core/loader/deconstructed_rom_directory.h": "e5749843d0d57da7dcd79ab440103fe259d4baea7e337baa993275ee3baa3154",
-    "3060ti-romfs-loading.patch": "7836416913cd99637ec32db25a4c6f96551e9a998f48f2cb1da276e3d8ead1ba"
+    "3060ti-romfs-loading.patch": "7836416913cd99637ec32db25a4c6f96551e9a998f48f2cb1da276e3d8ead1ba",
+    "3060ti-portable-paths.patch": "ae9fb962497265bb9178851ac9480c46b4ae883990d04f1f4f683757b1a362b1",
+    "modified/src/frontend_common/config.cpp": "a2f679c374c7977e0061bc8072980671b29cdb1b13ac7b75eab07d4d79bf6d5b"
   }
 }
